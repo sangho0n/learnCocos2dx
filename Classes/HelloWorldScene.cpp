@@ -51,16 +51,19 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(255, 255, 255, 255));
     this->addChild(wlayer);
 
-    // z index
-    auto pMan = Sprite::create("Images/grossini.png");
-    pMan->setPosition(Vec2(240, 160));
-    this->addChild(pMan, 1);
+    // 1. sprite 색 지정
+    // 2. sprite 속성 지정
 
-    auto pGirl = Sprite::create("Images/grossinis_sister1.png");
-    pGirl->setPosition(Vec2(240, 230));
-    this->addChild(pGirl, 0);
-    // 동적 위치 지정
-    pGirl->setLocalZOrder(3);
+    auto pRect = Sprite::create("Images/white-512x512.png");
+    pRect->setTextureRect(Rect(0, 0, 150, 150));
+    pRect->setPosition(Vec2(240, 160));
+    pRect->setColor(Color3B(0, 0, 255)); // blue
+
+    pRect->setScale(1.5f);
+    pRect->setRotation(45.0f);
+    pRect->setOpacity(160);
+
+    this->addChild(pRect);
 
     return true;
 }
