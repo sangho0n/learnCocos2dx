@@ -54,11 +54,11 @@ bool HelloWorld::init()
     // z index
     auto pMan = Sprite::create("Images/grossini.png");
     pMan->setPosition(Vec2(240, 160));
-    this->addChild(pMan);
+    this->addChild(pMan, 1);
 
     auto pGirl = Sprite::create("Images/grossinis_sister1.png");
-    pGirl->setPosition(Vec2(300, 160));
-    this->addChild(pGirl);
+    pGirl->setPosition(Vec2(240, 230));
+    this->addChild(pGirl, 0);
 
     return true;
 }
