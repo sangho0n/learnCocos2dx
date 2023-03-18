@@ -1,6 +1,6 @@
 ![image](https://user-images.githubusercontent.com/54069713/226094028-5e77d041-760d-4d1e-a066-5d0d24bc5d10.png)
 
-# learnCocos2dx
+# 0. learnCocos2dx
 
 코코스2dx 엔진을 배워봅시다 (v 4.0)
 
@@ -12,7 +12,7 @@
 - 브랜치명은 도서의 각 절의 번호와 이름을 참고하여 지었습니다.
 
 --------
-# 입문
+# 1. 입문
 ## Cocos2d-x란?
 ![image](https://user-images.githubusercontent.com/54069713/226093958-110a968f-bdc9-4ff7-a857-4fc764c3a074.png)
 
@@ -80,9 +80,78 @@ cmake .. -G"(설치된 비주얼스튜디오 버전; ex. Visual Studio 16 2019)"
 ![image](https://user-images.githubusercontent.com/54069713/226095725-77a6654d-3db1-4653-94b9-476f9f5e711c.png)
 
 --------
-# 기초
+# 2. 기초
+Cocos2d-x는 노드를 기준으로 디렉터, 씬, 레이어, 스프라이트의 계층적인 포함관계를 맺고,
+
+액션 클래스를 통해 애니메이션을 구현한다.
+
+## 기본 구성 요소
+- 노드
+
+최상위 클래스. 위치, 색상, 카메라 등의 여러 프로퍼티가 있음. 자체적으로 스케줄러를 포함하고 있음.
+- 디렉터
+
+싱글톤 클래스. 씬들을 관리하는 기능을 수행.
+- 씬과 레이어
+
+씬과 레이어는 스프라이트, 레이블, 메뉴 등과 같은 클래스들을 자식으로 가질 수 있음.
+3.0 버전 이전의 씬 객체는 레이어와 달리 터치이벤트를 처리하지 못하였으나, 이후로는 씬도 터치이벤트를 받을 수 있게됨.
+따라서 3.0 버전 이후의 레이어는 주로 터치이벤트를 처리하는 데 사용되기보다는 여러 객체들을 그룹화하는데 주로 사용된다.
+
+하나의 씬에는 여러 레이어들이 포함될 수 있다. 예를들어 일반적인 게임의 시작 씬의 경우 메뉴(or HUD) 레이어, 배경 레이어, 캐릭터 레이어 등으로 구성될 수 있다.
+
+- 스프라이트
+
+이미지 파일을 화면에 출력하는 역할을 수행. 파일 로딩과 화면 출력과 관련된 여러 메서드들이 정의되어 있다.
+- 액션
+
+스프라이트의 애니메이션 및 동적 처리를 위한 클래스. 이동, 회전, 점프, 크기변환 등
+- etc
+
+Sound, Particle, Box2d, Chipmonk 등...
+
+## 좌표계
+- UI 좌표계 (iOS, Android 화면 기준)
+
+![image](https://user-images.githubusercontent.com/54069713/226122125-35275a7b-684b-4096-9b2c-0a023bcf5020.png)
+
+- OpenGL 및 Cocos2d-X 좌표계
+
+![image](https://user-images.githubusercontent.com/54069713/226122205-fb00f694-c716-45fc-9828-bfef356b44c1.png)
+
+## 앵커포인트
+
+화면배치 및 회전의 기준. (0, 0) ~ (1, 1)로 나타나며, default는 (0.5, 0.5)
+## 자료형
+- cocos2d::Vec2 : 2차원 벡터
+- cocos2d::Size : 2차원 크기. width와 height를 갖는다.
+- cocos2d::Rect : 2차원 직사각형. 좌측 하단의 좌표(Vec2)와 그려질 크기인 Size를 담고 있다.
+- cocos2d::Color3B : RGB
+- cocos2d::Color4B : RGBA
+- cocos2d::Vector : std::vector의 확장판. 메모리 관리를 자동으로 해준다.
+
 --------
 # 스프라이트
+## 스프라이트 불러오기 및 앵커포인트 예시
+- Sprite::create로 이미지 로딩
+- 위치, 앵커포인트 설정
+- 씬의 child로 등록
+
+![image](https://user-images.githubusercontent.com/54069713/226123104-f6e26d20-551a-43f7-b7af-312b12e2888b.png)
+
+위치는 화면 중앙, 앵커포인트는 0, 0으로 설정된 모습
+## Z-Order 예시
+- 씬의 child로 등록할 때 지정 가능
+```cpp
+this->addChild(sprite, 2);
+```
+- 씬에 등록한 후 동적으로 지정 가능
+```cpp
+sprite->setLocalZOrder(2);
+```
+![image](https://user-images.githubusercontent.com/54069713/226123161-374255d6-c489-4ed4-b547-5cf053a99543.png)
+
+## 프로퍼티 예시
 -------
 # 레이블
 -------
