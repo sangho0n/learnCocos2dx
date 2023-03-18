@@ -131,7 +131,7 @@ Sound, Particle, Box2d, Chipmonk 등...
 - cocos2d::Vector : std::vector의 확장판. 메모리 관리를 자동으로 해준다.
 
 --------
-# 스프라이트
+# 3. 스프라이트
 ## 스프라이트 불러오기 및 앵커포인트 예시
 - Sprite::create로 이미지 로딩
 - 위치, 앵커포인트 설정
@@ -152,6 +152,26 @@ sprite->setLocalZOrder(2);
 ![image](https://user-images.githubusercontent.com/54069713/226123161-374255d6-c489-4ed4-b547-5cf053a99543.png)
 
 ## 프로퍼티 예시
+
+흰색 네모 모양의 스프라이트를...
+
+- 일부분만 잘라와 사용
+```cpp
+    pRect->setTextureRect(Rect(0, 0, 150, 150));
+    pRect->setPosition(Vec2(240, 160));
+```
+- 색 지정
+```cpp
+    pRect->setColor(Color3B(0, 0, 255)); // blue
+```
+- 크기 변환, 회전, 투명도(0 ~ 255) 프로퍼티 설정
+```cpp
+    pRect->setScale(1.5f);
+    pRect->setRotation(45.0f);
+    pRect->setOpacity(160);
+```
+![image](https://user-images.githubusercontent.com/54069713/226124422-0af12efb-03a0-4713-8404-1c0cbab18848.png)
+
 -------
 # 레이블
 -------
