@@ -59,6 +59,8 @@ bool HelloWorld::init()
     auto pGirl = Sprite::create("Images/grossinis_sister1.png");
     pGirl->setPosition(Vec2(240, 230));
     this->addChild(pGirl, 0);
+    // 동적 위치 지정
+    pGirl->setLocalZOrder(3);
 
     return true;
 }
