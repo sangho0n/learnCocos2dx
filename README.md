@@ -1,7 +1,8 @@
+![image](https://user-images.githubusercontent.com/54069713/226094028-5e77d041-760d-4d1e-a066-5d0d24bc5d10.png)
+
 # learnCocos2dx
 
 코코스2dx 엔진을 배워봅시다 (v 4.0)
-<p align = "center"> ![image](https://user-images.githubusercontent.com/54069713/226093388-0cb5fb94-7883-4c4c-b327-525fccfb1874.png) </p>
 
 
 - 이 레포지토리는 [핵심강좌! Cocos2d-x] 도서를 보면서 알게된 내용을 정리한 저장소입니다.
@@ -15,10 +16,68 @@
 ## Cocos2d-x란?
 ![image](https://user-images.githubusercontent.com/54069713/226093958-110a968f-bdc9-4ff7-a857-4fc764c3a074.png)
 
+- Coocs2d : OpenGL을 기반으로 한 게임엔진. 파이썬으로 구현되어 있다.
+- Cocos2d-iPhone
+
+아이폰 등장 이후 아이폰을 지원하기 위해 Objective-C언어로 다시 작성된 버전
+- Cocos2d-X
+
+중국의 개발자 왕저에 의해 C++로 포팅된 버전. 개발과 배포 모두 플랫폼에 종속적이지 않게 되었다.
 
 ## why cocos2d-x?
 
-## 개발환경 구축
+크로스플랫폼을 지원하는 2D 게임엔진이기 때분에 별도의 코드수정 없이 바로 iOS/Android 앱을 만들 수 있다. 개발도 맥, 윈도우, 리눅스 환경을 모두 지원한다. (다만, 아이폰이나 아이패드의 경우 최종 컴파일이 맥에서 이루어져야 하기 때문에, 다른 플랫폼에서 개발이 가능하긴 하나 최종적으로는 맥에서 컴파일하는 과정이 필요함)
+
+오픈소스임과 동시에 무료이다. 2d 게임의 개발을 목적으로 한 엔진이기 때문에 유니티에 비해 용량이 적고 속도가 빠르다. 국내에서도 꽤 많은 모바일 게임사들이 코코스2d-x를 채택하고 있다.
+
+~~에디터 기반 엔진인 코코스 크리에이터가 등장하고, 추콩사(코코스 개발사)가 Cocos2d-X 4.0 이후로 개발을 중단한다고 발표한 후로 레거시로 남을 것 같긴 하다만, 2d-x 역시 웰메이드 엔진이라 빠르게 전환될 것 같지는 않을 것이라고 믿는다 ㅎㅎ~~
+
+## 개발환경 구축(window 기준)
+### 과정
+- visual studio community 설치
+- python 설치
+- CMake 설치
+- cocos2d-x 설치
+- 프로젝트 생성
+
+도서가 3.x 버전을 기준으로 기술되어 있기에, [블로그](https://bakcoding.github.io/cocos/cocos001-test/)를 참고하여 작성하였습니다.
+
+### Visual Studio Community 설치
+버전을 잘 기억해두자! 프로젝트 생성 시 사용된다.
+
+작성자의 경우 Microsoft Visual Studio Community 2019 Version 16.11.18로 설치함
+
+(이미 설치했다면, Help > About Microsoft Visual Studio를 통해 확인 가능)
+
+### Python 설치
+3버전이 아닌 2버전 설치 필요. 설치 이후 환경변수 설정을 해줘야한다.
+### CMake 설치
+cmake는 makefile(빌드 스크립트)를 만들어주는 툴이다. 3.1버전 이상 설치 필요.
+### Cocos2d-X 
+Cocos2d-X 4.0 버전 다운로드.
+
+```
+cd (설치된 경로)
+python setup.py
+```
+### 프로젝트 생성
+- 프로젝트 생성
+```
+cd (프로젝트를 생성할 경로)
+cocos new (프로젝트명) -p (패키지명) -l cpp
+```
+- 솔루션 생성
+```
+cd (프로젝트 루트 경로)
+md win32-build  --win32-build 폴더 생성
+cd win32-build  --win32-build 폴더로 이동
+cmake .. -G"(설치된 비주얼스튜디오 버전; ex. Visual Studio 16 2019)" -A win32
+```
+이후 비주얼 스튜디오 에디터로 들어가 생성한 프로젝트를 시작 프로젝트로 설정해준 후 실행시켜보자.
+
+아래 화면이 나온다면 성공
+
+![image](https://user-images.githubusercontent.com/54069713/226095725-77a6654d-3db1-4653-94b9-476f9f5e711c.png)
 
 --------
 # 기초
