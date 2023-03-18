@@ -51,18 +51,14 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(255, 255, 255, 255));
     this->addChild(wlayer);
 
-    // sprite creation and init
+    // z index
     auto pMan = Sprite::create("Images/grossini.png");
-
-    // sprite position
     pMan->setPosition(Vec2(240, 160));
-    pMan->setAnchorPoint(Vec2(0, 0));
-    //pMan->setAnchorPoint(Vec2(0, 1));
-    //pMan->setAnchorPoint(Vec2(1, 0));
-    //pMan->setAnchorPoint(Vec2(1, 1));
-
-    // add sprite to scene
     this->addChild(pMan);
+
+    auto pGirl = Sprite::create("Images/grossinis_sister1.png");
+    pGirl->setPosition(Vec2(300, 160));
+    this->addChild(pGirl);
 
     return true;
 }
