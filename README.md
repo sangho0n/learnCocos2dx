@@ -180,7 +180,14 @@ sprite->setLocalZOrder(2);
 ![image](https://user-images.githubusercontent.com/54069713/226373575-225ad8e9-877e-4dda-9022-2a9177912152.png)
 
 -------
-# 레이블
+# 4. 레이블
+## 시스템 폰트
+4.0부터 Lable::create(text, sysfont, fontSize, ..) 메서드가 사라지면서 시스템폰트를 사용하려면 create() 메서드로 생성 후 하나씩 지정해주거나, createWithSystemFont()메서드를 직접 호출해야함.
+
+글씨체나 폰트사이즈, 글자색뿐만 아니라 글씨가 서지는 구역의 사이즈, 정렬 옵션을 지정해줄 수 있다.
+
+![image](https://user-images.githubusercontent.com/54069713/226389809-861119cd-c518-48fd-a6a2-5d6d9bf6ad1f.png)
+
 -------
 # 메뉴
 -------
