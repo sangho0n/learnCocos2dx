@@ -53,7 +53,7 @@ bool HelloWorld::init()
 
     auto pLabel1 = Label::createWithSystemFont("Hello World", "", 34);
     auto pCopiedLabel1 = Label::create(); 
-    auto pLabel2 = Label::createWithSystemFont("Hello World", "", 34);
+    auto pLabel2 = Label::createWithSystemFont("이 텍스트는 앞과 뒤가 잘려서 보여야 하는 텍스트입니다.", "", 34);
 
     pCopiedLabel1->setString("Hello World");
     pCopiedLabel1->setSystemFontName("");
