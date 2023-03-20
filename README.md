@@ -172,6 +172,13 @@ sprite->setLocalZOrder(2);
 ```
 ![image](https://user-images.githubusercontent.com/54069713/226124422-0af12efb-03a0-4713-8404-1c0cbab18848.png)
 
+## 부모 스프라이트와 자식 스프라이트
+자식 스프라이트는 부모 스프라이트를 기준으로 좌표계를 갖는다.
+
+예시이미지 : 빨간색 막대기 스프라이트를 사람 스프라이트의 자식으로 등록한 모습
+
+![image](https://user-images.githubusercontent.com/54069713/226373575-225ad8e9-877e-4dda-9022-2a9177912152.png)
+
 -------
 # 레이블
 -------
