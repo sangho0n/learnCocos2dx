@@ -51,19 +51,18 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(255, 255, 255, 255));
     this->addChild(wlayer);
 
-    // 1. sprite 색 지정
-    // 2. sprite 속성 지정
+    auto player = Sprite::create("Images/grossini.png");
+    auto hpBar = Sprite::create("Images/white-512x512.png");
 
-    auto pRect = Sprite::create("Images/white-512x512.png");
-    pRect->setTextureRect(Rect(0, 0, 150, 150));
-    pRect->setPosition(Vec2(240, 160));
-    pRect->setColor(Color3B(0, 0, 255)); // blue
+    player->setPosition(Vec2(240, 160));
+    hpBar->setTextureRect(Rect(0, 0, 50, 5));
+    hpBar->setColor(Color3B::RED);
 
-    pRect->setScale(1.5f);
-    pRect->setRotation(45.0f);
-    pRect->setOpacity(160);
+    Size parSize = player->getContentSize();
+    hpBar->setPosition(Vec2(parSize.width / 2.0, parSize.height + 10));
 
-    this->addChild(pRect);
+    this->addChild(player);
+    player->addChild(hpBar);
 
     return true;
 }
