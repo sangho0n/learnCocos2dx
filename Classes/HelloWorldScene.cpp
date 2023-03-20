@@ -52,22 +52,19 @@ bool HelloWorld::init()
     this->addChild(wlayer);
 
     auto pLabel1 = Label::createWithSystemFont("Hello World", "", 34);
-    auto pCopiedLabel1 = Label::create(); 
-    auto pLabel2 = Label::createWithSystemFont("이 텍스트는 앞과 뒤가 잘려서 보여야 하는 텍스트입니다.", "", 34);
-
-    pCopiedLabel1->setString("Hello World");
-    pCopiedLabel1->setSystemFontName("");
-    pCopiedLabel1->setSystemFontSize(34);
+    auto pLabel2 = Label::createWithSystemFont("자동 줄바꿈이 되는 텍스트입니다. ㅁㄴㅇㄹ ㅁㄴㅇㄻㄴ아.",
+        "",
+        34,
+        Size(240, 220),
+        TextHAlignment::CENTER,
+        TextVAlignment::TOP);
 
     pLabel1->setPosition(Vec2(240, 220));
-    pCopiedLabel1->setPosition(Vec2(240, 170));
     pLabel1->setColor(Color3B::BLACK);
-    pCopiedLabel1->setColor(Color3B::GRAY);
-    pLabel2->setPosition(240, 120);
+    pLabel2->setPosition(240, 20);
     pLabel2->setColor(Color3B::BLUE);
 
     this->addChild(pLabel1);
-    this->addChild(pCopiedLabel1);
     this->addChild(pLabel2);
 
     return true;
