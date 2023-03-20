@@ -51,18 +51,24 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(255, 255, 255, 255));
     this->addChild(wlayer);
 
-    auto player = Sprite::create("Images/grossini.png");
-    auto hpBar = Sprite::create("Images/white-512x512.png");
+    auto pLabel1 = Label::createWithSystemFont("Hello World", "", 34);
+    auto pCopiedLabel1 = Label::create(); 
+    auto pLabel2 = Label::createWithSystemFont("Hello World", "", 34);
 
-    player->setPosition(Vec2(240, 160));
-    hpBar->setTextureRect(Rect(0, 0, 50, 5));
-    hpBar->setColor(Color3B::RED);
+    pCopiedLabel1->setString("Hello World");
+    pCopiedLabel1->setSystemFontName("");
+    pCopiedLabel1->setSystemFontSize(34);
 
-    Size parSize = player->getContentSize();
-    hpBar->setPosition(Vec2(parSize.width / 2.0, parSize.height + 10));
+    pLabel1->setPosition(Vec2(240, 220));
+    pCopiedLabel1->setPosition(Vec2(240, 170));
+    pLabel1->setColor(Color3B::BLACK);
+    pCopiedLabel1->setColor(Color3B::GRAY);
+    pLabel2->setPosition(240, 120);
+    pLabel2->setColor(Color3B::BLUE);
 
-    this->addChild(player);
-    player->addChild(hpBar);
+    this->addChild(pLabel1);
+    this->addChild(pCopiedLabel1);
+    this->addChild(pLabel2);
 
     return true;
 }
