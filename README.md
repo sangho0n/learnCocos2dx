@@ -195,6 +195,12 @@ sprite->setLocalZOrder(2);
 
 ![image](https://user-images.githubusercontent.com/54069713/226917938-77130a53-f85e-4a8c-adf1-dbbb01ac07bd.png)
 
+## 캐릭터맵
+캐릭터맵은 비트맵과 동일한 특성을 지닌다. 그러나 비트맵과는 달리 png 파일 하나만으로 레이블을 생성해낼 수 있다.
+
+생성 시 높이, 너비, 시작 아스키코드 문자를 지정해줘야 하는데, plist xml 파일을 사용할 경우 이 부분 역시 코드 밖으로 빼낼 수 있다.
+
+![image](https://user-images.githubusercontent.com/54069713/226922842-9127faa2-cc68-4c8c-a72e-f102354dd82e.png)
 
 -------
 # 메뉴
