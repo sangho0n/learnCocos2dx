@@ -51,18 +51,13 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(255, 255, 255, 255));
     this->addChild(wlayer);
 
-    auto pLabel1 = Label::createWithSystemFont("Hello World", "", 34);
-    auto pLabel2 = Label::createWithSystemFont("자동 줄바꿈이 되는 텍스트입니다. ㅁㄴㅇㄹ ㅁㄴㅇㄻㄴ아.",
-        "",
-        34,
-        Size(240, 220),
-        TextHAlignment::CENTER,
-        TextVAlignment::TOP);
+    auto pLabel1 = Label::createWithSystemFont("Hello, World", "", 34);
+    auto pLabel2 = Label::createWithBMFont("fonts/bitmapFontTest4.fnt", "Hello, World");
 
     pLabel1->setPosition(Vec2(240, 220));
-    pLabel1->setColor(Color3B::BLACK);
-    pLabel2->setPosition(240, 20);
-    pLabel2->setColor(Color3B::BLUE);
+    pLabel1->setColor(Color3B(0, 0, 0));
+    pLabel2->setPosition(Vec2(240, 120));
+    pLabel2->setColor(Color3B::BLACK);
 
     this->addChild(pLabel1);
     this->addChild(pLabel2);
