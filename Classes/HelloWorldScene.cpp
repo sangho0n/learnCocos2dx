@@ -52,7 +52,7 @@ bool HelloWorld::init()
     this->addChild(wlayer);
 
     auto pLabel1 = Label::createWithSystemFont("Hello, World", "", 34);
-    auto pLabel2 = Label::createWithCharMap("fonts/tuffy_bold_italic-charmap.png", 48, 64, ' ');
+    auto pLabel2 = Label::createWithCharMap("fonts/tuffy_bold_italic-charmap.plist");
 
     pLabel1->setPosition(Vec2(240, 220));
     pLabel1->setColor(Color3B(0, 0, 0));
