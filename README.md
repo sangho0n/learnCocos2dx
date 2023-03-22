@@ -202,6 +202,12 @@ sprite->setLocalZOrder(2);
 
 ![image](https://user-images.githubusercontent.com/54069713/226922842-9127faa2-cc68-4c8c-a72e-f102354dd82e.png)
 
+## 트루타입 폰트
+ttf 파일을 임포트하여 사용하는 방식. 시스템폰트와 달리 플랫폼에 종속적이지 않다.
+
+![image](https://user-images.githubusercontent.com/54069713/226931848-397dd3ca-543f-4086-bd9f-65a477ba58d3.png)
+
+
 -------
 # 메뉴
 -------
