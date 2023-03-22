@@ -48,16 +48,16 @@ bool HelloWorld::init()
         return false;
     }
 
-    auto wlayer = LayerColor::create(Color4B(255, 255, 255, 255));
+    auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
     this->addChild(wlayer);
 
     auto pLabel1 = Label::createWithSystemFont("Hello, World", "", 34);
-    auto pLabel2 = Label::createWithBMFont("fonts/bitmapFontTest4.fnt", "Hello, World");
+    auto pLabel2 = Label::createWithCharMap("fonts/tuffy_bold_italic-charmap.png", 48, 64, ' ');
 
     pLabel1->setPosition(Vec2(240, 220));
     pLabel1->setColor(Color3B(0, 0, 0));
     pLabel2->setPosition(Vec2(240, 120));
-    pLabel2->setColor(Color3B::BLACK);
+    pLabel2->setString("1234");
 
     this->addChild(pLabel1);
     this->addChild(pLabel2);
