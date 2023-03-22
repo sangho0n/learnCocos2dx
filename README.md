@@ -188,6 +188,14 @@ sprite->setLocalZOrder(2);
 
 ![image](https://user-images.githubusercontent.com/54069713/226389809-861119cd-c518-48fd-a6a2-5d6d9bf6ad1f.png)
 
+## 비트맵 폰트
+비트맵폰트는 이미지 파일 기반의 폰트이다. 글자 하나마다 별개의 스프라이트로 관리하므로 한 글자마자 다른 효과를 부여할 수 있다.
+
+비트맵폰트를 사용하려면 동일한 이름의 fnt 파일과 png 파일이 필요하다.
+
+![image](https://user-images.githubusercontent.com/54069713/226917938-77130a53-f85e-4a8c-adf1-dbbb01ac07bd.png)
+
+
 -------
 # 메뉴
 -------
