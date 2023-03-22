@@ -51,16 +51,35 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
     this->addChild(wlayer);
 
-    auto pLabel1 = Label::createWithSystemFont("Hello, World", "", 34);
-    auto pLabel2 = Label::createWithCharMap("fonts/tuffy_bold_italic-charmap.plist");
+    TTFConfig ttfConf("fonts/Thonburi.ttf", 40.0f);
 
-    pLabel1->setPosition(Vec2(240, 220));
-    pLabel1->setColor(Color3B(0, 0, 0));
-    pLabel2->setPosition(Vec2(240, 120));
-    pLabel2->setString("1234");
+    auto pLabel1 = Label::createWithTTF(ttfConf, "Normal");
+    auto pLabel2 = Label::createWithTTF(ttfConf, "Glow");
+    Label* pLabel3;
+    auto pLabel4 = Label::createWithTTF(ttfConf, "Shadow");
+
+    pLabel1->setPosition(Vec2(240, 160 + 90));
+    pLabel1->setColor(Color3B::WHITE);
+
+    pLabel2->setPosition(Vec2(240, 160 + 30));
+    pLabel2->setColor(Color3B::GREEN);
+    pLabel2->enableGlow(Color4B::YELLOW);
+
+    ttfConf.outlineSize = 2;
+    ttfConf.bold = true;
+    pLabel3 = Label::createWithTTF(ttfConf, "Outline");
+    pLabel3->setPosition(Vec2(240, 160 - 30));
+    pLabel3->setColor(Color3B::WHITE);
+    pLabel3->enableOutline(Color4B::BLUE);
+
+    pLabel4->setPosition(Vec2(240, 160 - 90));
+    pLabel4->setColor(Color3B::RED);
+    pLabel4->enableShadow(Color4B::BLACK);
 
     this->addChild(pLabel1);
     this->addChild(pLabel2);
+    this->addChild(pLabel3);
+    this->addChild(pLabel4);
 
     return true;
 }
