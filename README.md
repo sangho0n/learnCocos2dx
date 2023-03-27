@@ -209,7 +209,34 @@ ttf 파일을 임포트하여 사용하는 방식. 시스템폰트와 달리 플
 
 
 -------
-# 메뉴
+# 5. 메뉴
+## 메뉴와 메뉴아이템
+Menu::create 메서드를 사용하면 빈 메뉴를 생성할 수 있다. 이렇게 생성된 인스턴스에는 메뉴아이템을 추가할 수 있다. 4.0버전에서 지원하는 메뉴아이템은 다음과 같다.
+- MenuItem
+- MenuItemAtlasFont
+- MenuItemFont
+- MenuItemImage
+- MenuItemLabel
+- MenuItemSprite
+- MenuItemToggle
+
+프로그래머가 직접 메뉴와 메뉴아이템의 위치를 지정해줄 수도 있고, 지정된 메서드를 사용해 위치와 정렬 방식을 지정할 수도 있다.
+
+## 메뉴아이템이미지
+이미지를 메뉴아이템으로 사용할 수 있다. MenuItemImage::create 메서드로 인스턴스 생성 시 평상시 이미지, 선택시 이미지, 비활성화시 이미지, 콜백함수를 지정해줄 수 있다.
+
+추가한 세 버튼 중 가운데 버튼을 클릭한 모습
+
+![image](https://user-images.githubusercontent.com/54069713/227931328-0b9c2be5-6d3e-40fc-82dc-e24dd08d7bc7.png)
+
+## 위치 지정
+메뉴와 메뉴아이템의 위치를 프로그래머가 임의로 지정해줄 수 있다.
+
+우측 상단에 있는 전원버튼을 눌렀을 때 콜백함수 내의 로그가 찍히는 모습
+
+![image](https://user-images.githubusercontent.com/54069713/227931776-2c7014da-82fa-4635-b1e4-fd2e258bcb6b.png)
+
+
 -------
 # 액션
 -------
