@@ -52,31 +52,24 @@ bool HelloWorld::init()
     this->addChild(wlayer);
 
     auto pMenuItem1 = MenuItemFont::create(
-        " Menu 1 ",
+        " generate ",
         CC_CALLBACK_1(HelloWorld::doClick1, this)
     );
 
     pMenuItem1->setColor(Color3B::BLACK);
 
     auto pMenuItem2 = MenuItemFont::create(
-        " Menu 2 ",
+        " remove ",
         CC_CALLBACK_1(HelloWorld::doClick1, this)
     );
     pMenuItem2->setColor(Color3B::BLACK);
 
-    auto pMenuItem3 = MenuItemImage::create(
-        "Images/btn-play-normal.png",
-        "Images/btn-play-selected.png",
-        CC_CALLBACK_1(HelloWorld::doClick1, this)
-    );
-
     pMenuItem1->setTag(1);
     pMenuItem2->setTag(2);
-    pMenuItem3->setTag(3);
 
-    auto pMenu = Menu::create(pMenuItem1, pMenuItem2, pMenuItem3, nullptr);
+    auto pMenu = Menu::create(pMenuItem1, pMenuItem2, nullptr);
 
-    pMenu->alignItemsHorizontally();
+    pMenu->alignItemsVertically();
     this->addChild(pMenu);
 
     return true;
@@ -98,7 +91,20 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::doClick1(Ref* pSender) {
     auto item = (MenuItem*) pSender;
-    log("%d번째 버튼 눌림", item->getTag());
+    int tag = item->getTag();
+
+    if (tag == 1) {
+        auto pMan = Sprite::create("Images/grossini.png");
+
+        pMan->setPosition(Vec2(100, 160));
+        pMan->setTag(11);
+        this->addChild(pMan);
+    }
+    else {
+        auto pMan = (Sprite*)getChildByTag(11);
+
+        this->removeChild(pMan);
+    }
     return;
 }
 
