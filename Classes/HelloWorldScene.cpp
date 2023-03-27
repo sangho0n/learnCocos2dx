@@ -51,35 +51,23 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
     this->addChild(wlayer);
 
-    TTFConfig ttfConf("fonts/Thonburi.ttf", 40.0f);
+    auto closeItem = MenuItemImage::create("CloseNormal.png",
+        "CloseSelected.png",
+        CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+    auto playItem = MenuItemImage::create("Images/btn-play-normal.png",
+        "Images/btn-play-selected.png",
+        CC_CALLBACK_1(HelloWorld::doClick1, this));
+    auto highscoreItem = MenuItemImage::create("Images/btn-highscores-normal.png",
+        "Images/btn-highscores-selected.png",
+        CC_CALLBACK_1(HelloWorld::doClick2, this));
 
-    auto pLabel1 = Label::createWithTTF(ttfConf, "Normal");
-    auto pLabel2 = Label::createWithTTF(ttfConf, "Glow");
-    Label* pLabel3;
-    auto pLabel4 = Label::createWithTTF(ttfConf, "Shadow");
+    Menu* pMenu = Menu::create(playItem, highscoreItem, nullptr);
 
-    pLabel1->setPosition(Vec2(240, 160 + 90));
-    pLabel1->setColor(Color3B::WHITE);
+    pMenu->addChild(closeItem);
 
-    pLabel2->setPosition(Vec2(240, 160 + 30));
-    pLabel2->setColor(Color3B::GREEN);
-    pLabel2->enableGlow(Color4B::YELLOW);
+    pMenu->alignItemsVertically();
 
-    ttfConf.outlineSize = 2;
-    ttfConf.bold = true;
-    pLabel3 = Label::createWithTTF(ttfConf, "Outline");
-    pLabel3->setPosition(Vec2(240, 160 - 30));
-    pLabel3->setColor(Color3B::WHITE);
-    pLabel3->enableOutline(Color4B::BLUE);
-
-    pLabel4->setPosition(Vec2(240, 160 - 90));
-    pLabel4->setColor(Color3B::RED);
-    pLabel4->enableShadow(Color4B::BLACK);
-
-    this->addChild(pLabel1);
-    this->addChild(pLabel2);
-    this->addChild(pLabel3);
-    this->addChild(pLabel4);
+    this->addChild(pMenu);
 
     return true;
 }
@@ -96,4 +84,16 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
 
+}
+
+void HelloWorld::doClick1(Ref* pSender) {
+    // do sth
+    log("do click 1");
+    return;
+}
+
+void HelloWorld::doClick2(Ref* pSender) {
+    // do sth
+    log("do click 2");
+    return;
 }
