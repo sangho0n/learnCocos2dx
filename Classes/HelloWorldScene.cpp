@@ -51,17 +51,32 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
     this->addChild(wlayer);
 
-    auto closeItem = MenuItemImage::create(
-        "CloseNormal.png",
-        "CloseSelected.png",
-        CC_CALLBACK_1(HelloWorld::doClick1, this));
-    closeItem->setPosition(Vec2(430, 320));
+    auto pMenuItem1 = MenuItemFont::create(
+        " Menu 1 ",
+        CC_CALLBACK_1(HelloWorld::doClick1, this)
+    );
 
-    Menu* pMenu = Menu::create(nullptr);
+    pMenuItem1->setColor(Color3B::BLACK);
 
-    pMenu->setPosition(Vec2::ZERO);
-    pMenu->addChild(closeItem);
+    auto pMenuItem2 = MenuItemFont::create(
+        " Menu 2 ",
+        CC_CALLBACK_1(HelloWorld::doClick1, this)
+    );
+    pMenuItem2->setColor(Color3B::BLACK);
 
+    auto pMenuItem3 = MenuItemImage::create(
+        "Images/btn-play-normal.png",
+        "Images/btn-play-selected.png",
+        CC_CALLBACK_1(HelloWorld::doClick1, this)
+    );
+
+    pMenuItem1->setTag(1);
+    pMenuItem2->setTag(2);
+    pMenuItem3->setTag(3);
+
+    auto pMenu = Menu::create(pMenuItem1, pMenuItem2, pMenuItem3, nullptr);
+
+    pMenu->alignItemsHorizontally();
     this->addChild(pMenu);
 
     return true;
@@ -82,8 +97,8 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 }
 
 void HelloWorld::doClick1(Ref* pSender) {
-    // do sth
-    log("전원 버튼 눌림");
+    auto item = (MenuItem*) pSender;
+    log("%d번째 버튼 눌림", item->getTag());
     return;
 }
 
