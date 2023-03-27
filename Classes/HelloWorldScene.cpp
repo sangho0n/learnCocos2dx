@@ -51,21 +51,16 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
     this->addChild(wlayer);
 
-    auto closeItem = MenuItemImage::create("CloseNormal.png",
+    auto closeItem = MenuItemImage::create(
+        "CloseNormal.png",
         "CloseSelected.png",
-        CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-    auto playItem = MenuItemImage::create("Images/btn-play-normal.png",
-        "Images/btn-play-selected.png",
         CC_CALLBACK_1(HelloWorld::doClick1, this));
-    auto highscoreItem = MenuItemImage::create("Images/btn-highscores-normal.png",
-        "Images/btn-highscores-selected.png",
-        CC_CALLBACK_1(HelloWorld::doClick2, this));
+    closeItem->setPosition(Vec2(430, 320));
 
-    Menu* pMenu = Menu::create(playItem, highscoreItem, nullptr);
+    Menu* pMenu = Menu::create(nullptr);
 
+    pMenu->setPosition(Vec2::ZERO);
     pMenu->addChild(closeItem);
-
-    pMenu->alignItemsVertically();
 
     this->addChild(pMenu);
 
@@ -88,7 +83,7 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::doClick1(Ref* pSender) {
     // do sth
-    log("do click 1");
+    log("전원 버튼 눌림");
     return;
 }
 
