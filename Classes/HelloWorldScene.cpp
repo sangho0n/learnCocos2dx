@@ -101,7 +101,7 @@ void HelloWorld::doClick1(Ref* pSender) {
         this->addChild(pMan);
     }
     else {
-        auto pMan = (Sprite*)getChildByTag(11);
+        auto pMan = getChildByTag<Sprite*>(11);
 
         this->removeChild(pMan);
     }
