@@ -43,6 +43,10 @@ public:
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
+
+private:
+    void doClick1(cocos2d::Ref* pSender);
+    void doClick2(cocos2d::Ref* pSender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

@@ -51,35 +51,26 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
     this->addChild(wlayer);
 
-    TTFConfig ttfConf("fonts/Thonburi.ttf", 40.0f);
+    auto pMenuItem1 = MenuItemFont::create(
+        " generate ",
+        CC_CALLBACK_1(HelloWorld::doClick1, this)
+    );
 
-    auto pLabel1 = Label::createWithTTF(ttfConf, "Normal");
-    auto pLabel2 = Label::createWithTTF(ttfConf, "Glow");
-    Label* pLabel3;
-    auto pLabel4 = Label::createWithTTF(ttfConf, "Shadow");
+    pMenuItem1->setColor(Color3B::BLACK);
 
-    pLabel1->setPosition(Vec2(240, 160 + 90));
-    pLabel1->setColor(Color3B::WHITE);
+    auto pMenuItem2 = MenuItemFont::create(
+        " remove ",
+        CC_CALLBACK_1(HelloWorld::doClick1, this)
+    );
+    pMenuItem2->setColor(Color3B::BLACK);
 
-    pLabel2->setPosition(Vec2(240, 160 + 30));
-    pLabel2->setColor(Color3B::GREEN);
-    pLabel2->enableGlow(Color4B::YELLOW);
+    pMenuItem1->setTag(1);
+    pMenuItem2->setTag(2);
 
-    ttfConf.outlineSize = 2;
-    ttfConf.bold = true;
-    pLabel3 = Label::createWithTTF(ttfConf, "Outline");
-    pLabel3->setPosition(Vec2(240, 160 - 30));
-    pLabel3->setColor(Color3B::WHITE);
-    pLabel3->enableOutline(Color4B::BLUE);
+    auto pMenu = Menu::create(pMenuItem1, pMenuItem2, nullptr);
 
-    pLabel4->setPosition(Vec2(240, 160 - 90));
-    pLabel4->setColor(Color3B::RED);
-    pLabel4->enableShadow(Color4B::BLACK);
-
-    this->addChild(pLabel1);
-    this->addChild(pLabel2);
-    this->addChild(pLabel3);
-    this->addChild(pLabel4);
+    pMenu->alignItemsVertically();
+    this->addChild(pMenu);
 
     return true;
 }
@@ -96,4 +87,29 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
 
+}
+
+void HelloWorld::doClick1(Ref* pSender) {
+    auto item = (MenuItem*) pSender;
+    int tag = item->getTag();
+
+    if (tag == 1) {
+        auto pMan = Sprite::create("Images/grossini.png");
+
+        pMan->setPosition(Vec2(100, 160));
+        pMan->setTag(11);
+        this->addChild(pMan);
+    }
+    else {
+        auto pMan = getChildByTag<Sprite*>(11);
+
+        this->removeChild(pMan);
+    }
+    return;
+}
+
+void HelloWorld::doClick2(Ref* pSender) {
+    // do sth
+    log("do click 2");
+    return;
 }
