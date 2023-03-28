@@ -236,6 +236,28 @@ Menu::create 메서드를 사용하면 빈 메뉴를 생성할 수 있다. 이�
 
 ![image](https://user-images.githubusercontent.com/54069713/227931776-2c7014da-82fa-4635-b1e4-fd2e258bcb6b.png)
 
+## 메뉴아이템폰트
+MenuItemFont 인스턴스를 사용하면 프로그래머가 원하는 텍스트를 바로 메뉴아이템으로 만들 수 있다.
+MenuItemFont::create 메서드는 인자로 text와 콜백함수(optional)를 받는다.
+
+왼쪽부터 오른쪽으로 태깅하여 콜백함수를 통해 로그를 찍어본 모습. 1번 버튼과 2번 버튼은 메뉴아이템폰트 인스턴스이다.
+
+![image](https://user-images.githubusercontent.com/54069713/228145697-d038b684-9167-4f98-ba5c-d4166925d542.png)
+
+## 태그 사용하기
+메뉴아이템 말고도 cocos2d-x의 모든 노드에는 태그를 설정해줄 수 있다.
+
+한편 메뉴아이템에 등록된 콜백함수는 Ref* 타입의 인자를 받는다. Ref 클래스는 레퍼런스 카운팅을 위해 사용되는 클래스로, Cocos2d-x의 Node 클래스는 Ref 클래스를 상속받는다. [출처](https://docs.cocos2d-x.org/api-ref/cplusplus/V3.15/df/d28/classcocos2d_1_1_ref.html)
+
+브랜치 5.5-menu-tag-sprite에서는 같은 콜백함수 내에서 sender의 태그를 확인해 각각 다른 기능을 수행하도록 구현하였다. generate 메뉴아이템을 누르면 스프라이트가 생성되고, remove 버튼을 누르면 스프라이트가 삭제된다. 스프라이트에 태깅을 하여 원하는 스프라이트를 바로 얻어와 삭제할 수 있도록 구현한 모습이다.
+
+generate 메뉴아이템 클릭 시
+
+![image](https://user-images.githubusercontent.com/54069713/228149450-783bda94-cd7d-43b4-acd5-74d8e7ca1191.png)
+
+remove 메뉴아이템 클릭 시
+
+![image](https://user-images.githubusercontent.com/54069713/228149546-6166c286-35c7-473a-b99d-7b00b0774bd0.png)
 
 -------
 # 액션
