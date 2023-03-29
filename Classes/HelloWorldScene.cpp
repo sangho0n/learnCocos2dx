@@ -26,6 +26,21 @@
 
 USING_NS_CC;
 
+HelloWorld::HelloWorld() {
+    // 초기 위치 지정
+    // default scene size 480, 320
+    actionKindMenuPos = Vec2(240, 300);
+    actionDoMenuPos = Vec2(400, 200);
+    pManInitPos = Vec2(50, 220);
+    pGirlInitPos = Vec2(50, 100);
+    actionKind = " move ";
+    MenuItemFont::setFontSize(13);
+
+    pMan = nullptr;
+    pGirl = nullptr;
+
+}
+
 Scene* HelloWorld::createScene()
 {
     return HelloWorld::create();
@@ -48,29 +63,48 @@ bool HelloWorld::init()
         return false;
     }
 
+    // 씬 레이어 크기 지정
     auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
     this->addChild(wlayer);
 
-    auto pMenuItem1 = MenuItemFont::create(
-        " generate ",
-        CC_CALLBACK_1(HelloWorld::doClick1, this)
-    );
+    // 스프라이트 생성 및 추가새
+    pMan = Sprite::create("Images/grossini.png");
+    pGirl = Sprite::create("Images/grossinis_sister1.png");
+    pMan->setPosition(pManInitPos);
+    pGirl->setPosition(pGirlInitPos);
+    originColorMan = pMan->getColor();
+    originColorGirl = pGirl->getColor();
+    this->addChild(pMan); this->addChild(pGirl);
 
-    pMenuItem1->setColor(Color3B::BLACK);
+    // action 종류 선택 메뉴
+    auto moveActionItem = MenuItemFont::create(" move ", CC_CALLBACK_1(HelloWorld::actionKindChange, this)); moveActionItem->setColor(Color3B::BLACK);
+    auto jumpActionItem = MenuItemFont::create(" jump ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
+    auto bezierActionItem = MenuItemFont::create(" bezier ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
+    auto placeActionItem = MenuItemFont::create(" place ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
+    auto scaleActionItem = MenuItemFont::create(" scale ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
+    auto rotateActionItem = MenuItemFont::create(" rotate ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
+    auto showHideActionItem = MenuItemFont::create(" show/hide ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
+    auto blinkActionItem = MenuItemFont::create(" blink ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
+    auto fadeActionItem = MenuItemFont::create(" fade ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
+    auto tintActionItem = MenuItemFont::create(" tint ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
 
-    auto pMenuItem2 = MenuItemFont::create(
-        " remove ",
-        CC_CALLBACK_1(HelloWorld::doClick1, this)
-    );
-    pMenuItem2->setColor(Color3B::BLACK);
+    auto actionKindMenu = Menu::create(moveActionItem, jumpActionItem, bezierActionItem, placeActionItem, scaleActionItem, rotateActionItem,
+        showHideActionItem, blinkActionItem, fadeActionItem, tintActionItem, nullptr);
+    actionKindMenu->setName("actionKindMenu");
+    actionKindMenu->setPosition(actionKindMenuPos);
+    actionKindMenu->alignItemsHorizontally();
+    this->addChild(actionKindMenu);
 
-    pMenuItem1->setTag(1);
-    pMenuItem2->setTag(2);
+    // action 실행 및 원상복귀(혹은 반대 action 취하기) 메뉴
+    auto doItem = MenuItemFont::create(" do ", CC_CALLBACK_1(HelloWorld::doOrUndo, this));
+    auto resetItem = MenuItemFont::create(" reset ", CC_CALLBACK_1(HelloWorld::doOrUndo, this));
+    doItem->setTag(1);
+    resetItem->setTag(2);
 
-    auto pMenu = Menu::create(pMenuItem1, pMenuItem2, nullptr);
-
-    pMenu->alignItemsVertically();
-    this->addChild(pMenu);
+    auto doOrUndoMenu = Menu::create(doItem, resetItem, nullptr);
+    doOrUndoMenu->setPosition(actionDoMenuPos);
+    doOrUndoMenu->alignItemsVertically();
+    this->addChild(doOrUndoMenu);
 
     return true;
 }
@@ -89,27 +123,127 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 }
 
-void HelloWorld::doClick1(Ref* pSender) {
-    auto item = (MenuItem*) pSender;
-    int tag = item->getTag();
+void HelloWorld::actionKindChange(Ref * pSender) {
+    auto pMenuItem = (MenuItemFont*)pSender;
+    auto pMenuItemLabel = (Label*)pMenuItem->getLabel();
+    actionKind = pMenuItemLabel->getString();
 
-    if (tag == 1) {
-        auto pMan = Sprite::create("Images/grossini.png");
-
-        pMan->setPosition(Vec2(100, 160));
-        pMan->setTag(11);
-        this->addChild(pMan);
+    auto actionKindMenu = getChildByName<Menu*>("actionKindMenu");
+    for (auto elem : actionKindMenu->getChildren()) {
+        auto item = (MenuItemFont*)elem;
+        item->setColor(Color3B::WHITE);
+        auto tempstr = ((Label*)item->getLabel())->getString();
+        if (actionKind == tempstr) item->setColor(Color3B::BLACK);
     }
-    else {
-        auto pMan = getChildByTag<Sprite*>(11);
 
-        this->removeChild(pMan);
-    }
     return;
 }
 
-void HelloWorld::doClick2(Ref* pSender) {
-    // do sth
-    log("do click 2");
-    return;
+void HelloWorld::doOrUndo(Ref* pSender) {
+    allocateActions();
+    auto item = (MenuItemFont*)pSender;
+
+    if (item->getTag() == 2) {
+        // reset
+        pMan->setPosition(pManInitPos);
+        pGirl->setPosition(pGirlInitPos);
+        pMan->setScale(1.0f);
+        pGirl->setScale(1.0f);
+        pMan->setVisible(true);
+        pGirl->setVisible(true);
+        pMan->setRotation(0.0f);
+        pGirl->setRotation(0.0f);
+        pMan->setColor(originColorMan);
+        pGirl->setColor(originColorGirl);
+        pMan->runAction(myFadeOut->reverse());
+        pGirl->runAction(myFadeOut->reverse());
+        return;
+    }
+
+    // moveActionItem, jumpActionItem, bezierActionItem, placeActionItem, scaleActionItem, rotateActionItem,
+    // showHideActionItem, blinkActionItem, fadeActionItem, tintActionItem
+    if (actionKind == " move ") {
+        pMan->runAction(myMoveTo);
+        pGirl->runAction(myMoveBy);
+        return;
+    }
+    if (actionKind == " jump ") {
+        pMan->runAction(myJumpTo);
+        pGirl->runAction(myJumpBy);
+        return;
+    }
+    if (actionKind == " bezier ") {
+        pMan->runAction(myBezierTo);
+        pGirl->runAction(myBezierBy);
+        return;
+    }
+    if (actionKind == " place ") {
+        pMan->runAction(myPlace);
+        log("Place action does not have by or to");
+        return;
+    }
+    if (actionKind == " scale ") {
+        pMan->runAction(myScaleTo);
+        pGirl->runAction(myScaleBy);
+        return;
+    }
+    if (actionKind == " rotate ") {
+        pMan->runAction(myRotateTo);
+        pGirl->runAction(myRotateBy);
+        return;
+    }
+    if (actionKind == " show/hide ") {
+        pMan->runAction(myShow);
+        pMan->runAction(myHide);
+        return;
+    }
+    if (actionKind == " blink ") {
+        pMan->runAction(myBlink);
+        log("Blink action does not have by or to");
+        return;
+    }
+    if (actionKind == " fade ") {
+        pMan->runAction(myFadeOut);
+        //pGirl->runAction(myFadeOut);
+        return;
+    }
+    if (actionKind == " tint ") {
+        pMan->runAction(myTintTo);
+        pGirl->runAction(myTintBy);
+        return;
+    }
+}
+
+void HelloWorld::allocateActions() {
+    myMoveTo = MoveTo::create(2, Vec2(400, 0));
+    myMoveBy = MoveBy::create(2, Vec2(400, 0));
+
+    myJumpTo = JumpTo::create(2, Vec2(400, 0), 50, 3);
+    myJumpBy = JumpBy::create(2, Vec2(400, 0), 50, 3);
+
+    ccBezierConfig bzConf;
+    bzConf.controlPoint_1 = Vec2(150, 150);
+    bzConf.controlPoint_2 = Vec2(300, -150);
+    bzConf.endPosition = Vec2(400, 0);
+    myBezierTo = BezierTo::create(2, bzConf);
+    myBezierBy = BezierBy::create(2, bzConf);
+
+    myPlace = Place::create(Vec2(400, 160));
+
+    myScaleTo = ScaleTo::create(2, 1.2f);
+    myScaleBy = ScaleBy::create(2, 1.2f);
+
+    myRotateTo = RotateTo::create(2, -90);
+    myRotateBy = RotateBy::create(2, -90);
+
+    myShow = Show::create();
+    myHide = Hide::create();
+
+    myBlink = Blink::create(2, 6);
+
+    myFadeOut = FadeOut::create(2);
+    myFadeIn = FadeIn::create(1);
+
+    myTintTo = TintTo::create(2, Color3B::BLACK);
+    myTintBy = TintBy::create(2, -50, -50, -50);
 }
