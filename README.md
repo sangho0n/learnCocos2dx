@@ -260,7 +260,93 @@ remove 메뉴아이템 클릭 시
 ![image](https://user-images.githubusercontent.com/54069713/228149546-6166c286-35c7-473a-b99d-7b00b0774bd0.png)
 
 -------
-# 액션
+# 6. 액션
+## 액션이란?
+Action은 말 그대로 이동, 회전, 크기변환 등 스프라이트 및 노드들을 변환하는  기능을 제공하는 클래스이다. 교재에서는 다음과 같은 기준으로 액션을 나누고 있다.
+
+|종류|설명|
+|------|---|
+|Basic Action|기본으로 제공되는 singular 액션(Move, Jump, Rotate, Scale, Tint, Bezier, Place, Blink, Show/Hide(+ ToggleVisibiltiy), Fade)|
+|Composition Action|복합 액션|
+|Ease Action|진행속도를 조절할 수 있는 액션|
+|CallFunc Action|콜백 액션|
+
+한편, [공식문서](https://docs.cocos2d-x.org/cocos2d-x/v4/en/actions/getting_started.html)는 다음과 같은 기준으로 나누고 있다.
+
+
+|종류|설명|
+|------|---|
+|Basic Action|기본으로 제공되는 singular 액션(위 분류에서 ease action이 이곳에 포함됨)|
+|Sequences|복합 액션|
+
+그리고 CallFunc는 Sequence::create() 메서드의 인자로 들어갈 수 있는 오브젝트라고 설명하고 있다.
+본 레포지토리에서는 전자의 순서를 기준으로 액션을 설명하겠지만, 원칙은 공식문서를 따름에 유의하자.
+
+한편 move와 jump 등의 액션들은 by 액션과 to 액션으로 나눌 수 있다.
+- By : 현재 위치 + Vec2를 한 곳으로 이동 or 현재 색상 + (deltaR, deltaG, deltaB)으로 색 변환
+- To : 현재 위치에서 Vec2로 주어진 곳까지 이동 or 주어진 Color3B(또는 rgb)까지 이동
+
+따라서 동일한 Vec2(및 Color)를 기준으로 By 액션을 여러번 적용하면 적용한 만큼 변환되지만, To 액션은 한번만 변환된다. 
+
+## 기본 액션 Basic Action
+교재에서는 다음과 같이 기본 액션들을 분류하고 있다.(앞서 말했듯, Ease action은 이 설명에는 포함되지 않음)
+|기능 분류|액션 종류|
+|------|---|
+|위치 변경|MoveBy, MoveTo, JumpBy, JumpTo, BezierBy, BezierTo, Place|
+|크기 변경|ScaleBy, ScaleTo|
+|회전 변경|RotateBy, RotateTo|
+|가시성 변경|Show, Hide, Blink, ToggleVisibility|
+|투명도 변경|FadeIn, FadeOut, FadeTo|
+|색상 변경|TintBy, TintTo|
+
+### Move
+- By : 주어진 시간 동안, 현재위치 + 주어진 Vec2까지 이동
+- To : 주어진 시간 동안, 주어진 Vec2까지 이동
+### Jump
+- By : MoveBy + 이동하면서 주어진 높이를 주어진 횟수만큼 점프 
+- To : MoveTo + 이동하면서 주어진 높이를 주어진 횟수만큼 점프
+### Bezier
+- By : MoveBy + 베지어 곡선을 그리며 이동
+- To : MoveTo + 베지어 곡선을 그리며 이동
+
+한편 베지어 곡선의 정보는 ccBezierConfig를 통해 전달되며, 컨트롤 포인트 1, 컨트롤 포인트 2, 목표 지점의 좌푯값이 해당 인스턴스에 포함된다.
+### Place
+주어진 곳으로 순간이동
+### Scale
+- By : 주어진 시간 동안, 현재 크기 * 주어진 스케일 값으로 변화
+- To : 주어진 시간 동안, 원래 크기 * 주어진 스케일 값으로 변화
+### Rotate
+- By : 주어진 시간 동안, 시계방향으로 주어진 각도만큼 회전
+- To : 주어진 시간 동안, 주어진 각도로 회전(가장 짧은 방향)
+
+한편 각도는 육십분법으로 넘겨주어야 한다. 한가지 의문인 것은, 오픈지엘 좌표계를 따름에도 불구하고 왜 회전에서의 양의 방향이 시계방향인지는 좀 의문이다.. 이유를 알게 되면 추가하겠다.
+
+-90 방향으로 1번 및 2번 회전시킨 경우(남자는 To, 여자는 By; 여자가 반시계방향으로 돌아감)
+
+![image](https://user-images.githubusercontent.com/54069713/228423797-8c19717f-4786-49de-a914-30463c18fbe7.png)
+![image](https://user-images.githubusercontent.com/54069713/228423859-43863c3d-cf84-48e4-866e-d209681a5893.png)
+
+
+270 방향으로 1번 및 2번 회전시킨 경우(여자가 시계방향으로 돌아감)
+
+![image](https://user-images.githubusercontent.com/54069713/228423639-4ef13950-2e0e-4f8f-b756-b620d6cf3ef3.png)
+![image](https://user-images.githubusercontent.com/54069713/228423919-0ad213ce-9ab1-4385-b4fc-cd706a08ed9a.png)
+### Show/Hide
+보여주거나 숨김
+### Blink
+주어진 시간 동안 주어진 횟수 만큼 깜빡임
+### ToggleVisibility
+현재의 가시성 여부를 뒤집음
+### Fade
+- In : 주어진 시간 동안 점점 나타남
+- Out : 주어진 시간 동안 점점 사라짐
+- To : 주어진 시간 동안 주어진 투명도로 변화함
+### Tint
+- By : 주어진 시간 동안 현재 색상 + (deltaR, deltaG, deltaB)로 변화
+- To : 주어진 시간 동안 주어진 Color3B(혹은 r, g, b)로 변화
+
+## 복합 액션
+
 -------
 # 애니메이션
 -------
