@@ -144,18 +144,14 @@ void HelloWorld::doOrUndo(Ref* pSender) {
 
     if (item->getTag() == 2) {
         // reset
+        pMan->removeFromParentAndCleanup(true);
+        pGirl->removeFromParentAndCleanup(true);
+        pMan = Sprite::create("Images/grossini.png");
+        pGirl = Sprite::create("Images/grossinis_sister1.png");
         pMan->setPosition(pManInitPos);
         pGirl->setPosition(pGirlInitPos);
-        pMan->setScale(1.0f);
-        pGirl->setScale(1.0f);
-        pMan->setVisible(true);
-        pGirl->setVisible(true);
-        pMan->setRotation(0.0f);
-        pGirl->setRotation(0.0f);
-        pMan->setColor(originColorMan);
-        pGirl->setColor(originColorGirl);
-        pMan->runAction(myFadeOut->reverse());
-        pGirl->runAction(myFadeOut->reverse());
+        this->addChild(pMan);
+        this->addChild(pGirl);
         return;
     }
 
