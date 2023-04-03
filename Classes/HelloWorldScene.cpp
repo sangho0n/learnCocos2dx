@@ -38,7 +38,6 @@ HelloWorld::HelloWorld() {
 
     pMan = nullptr;
     pGirl = nullptr;
-
 }
 
 Scene* HelloWorld::createScene()
@@ -95,7 +94,7 @@ bool HelloWorld::init()
     actionKindMenu->alignItemsHorizontally();
     this->addChild(actionKindMenu);
 
-    // action 실행 및 원상복귀(혹은 반대 action 취하기) 메뉴
+    // action 실행 및 원상복귀 메뉴
     auto doItem = MenuItemFont::create(" do ", CC_CALLBACK_1(HelloWorld::doOrUndo, this));
     auto resetItem = MenuItemFont::create(" reset ", CC_CALLBACK_1(HelloWorld::doOrUndo, this));
     doItem->setTag(1);
