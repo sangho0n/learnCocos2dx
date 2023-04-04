@@ -91,12 +91,14 @@ bool HelloWorld::init()
     auto elasticeItem = MenuItemFont::create(" ELASTICE ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(elasticeItem);
     auto bounceItem = MenuItemFont::create(" BOUNCE ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(bounceItem);
     auto speedItem = MenuItemFont::create(" SPEED ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(speedItem);
+    auto backItem = MenuItemFont::create(" BACK ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(backItem);
     auto resetItem = MenuItemFont::create(" RESET ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(resetItem);
 
     easeItem->setTag(NORMAL);
     elasticeItem->setTag(ELASTIC);
     bounceItem->setTag(BOUNCE);
     speedItem->setTag(SPEED);
+    backItem->setTag(BACK);
     resetItem->setTag(RESET);
 
     auto doOrUndoMenu = Menu::createWithArray(items);
@@ -159,18 +161,58 @@ void HelloWorld::doOrUndo(Ref* pSender) {
     auto move = MoveBy::create(1.0f, Vec2(100, 0));
 
     if (action == NORMAL) {
-
+        auto normal = move;
+        auto in = EaseIn::create(move->clone(), 0.4f);
+        auto out = EaseOut::create(move->clone(), 0.4f);
+        auto inOut = EaseInOut::create(move->clone(), 0.4f);
+        pBall->runAction(normal);
+        pMan->runAction(in);
+        pGirl1->runAction(out);
+        pGirl2->runAction(inOut);
         return;
     }
     if (action == ELASTIC) {
+        auto normal = move;
+        auto in = EaseElasticIn::create(move->clone());
+        auto out = EaseElasticOut::create(move->clone());
+        auto inOut = EaseElasticInOut::create(move->clone());
+        pBall->runAction(normal);
+        pMan->runAction(in);
+        pGirl1->runAction(out);
+        pGirl2->runAction(inOut);
         return;
     }
     if (action == BOUNCE) {
-        
+        auto normal = move;
+        auto in = EaseBounceIn::create(move->clone());
+        auto out = EaseBounceOut::create(move->clone());
+        auto inOut = EaseBounceInOut::create(move->clone());
+        pBall->runAction(normal);
+        pMan->runAction(in);
+        pGirl1->runAction(out);
+        pGirl2->runAction(inOut);
         return;
     }
     if (action == SPEED) {
-
+        auto normal = move;
+        auto in = Speed::create(move->clone(), 2.0f);
+        auto out = Speed::create(move->clone(), 3.0f);
+        auto inOut = Speed::create(move->clone(), 4.0f);
+        pBall->runAction(normal);
+        pMan->runAction(in);
+        pGirl1->runAction(out);
+        pGirl2->runAction(inOut);
+        return;
+    }
+    if (action == BACK) {
+        auto normal = move;
+        auto in = EaseBackIn::create(move->clone());
+        auto out = EaseBackOut::create(move->clone());
+        auto inOut = EaseBackInOut::create(move->clone());
+        pBall->runAction(normal);
+        pMan->runAction(in);
+        pGirl1->runAction(out);
+        pGirl2->runAction(inOut);
         return;
     }
 }

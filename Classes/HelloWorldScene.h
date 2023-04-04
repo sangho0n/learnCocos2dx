@@ -67,6 +67,7 @@ private:
         ELASTIC,
         BOUNCE,
         SPEED,
+        BACK,
         RESET
     };
 };
