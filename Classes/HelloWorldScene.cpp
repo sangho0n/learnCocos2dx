@@ -31,12 +31,16 @@ HelloWorld::HelloWorld() {
     // default scene size 480, 320
     actionKindMenuPos = Vec2(240, 300);
     actionDoMenuPos = Vec2(400, 200);
-    pManInitPos = Vec2(50, 220);
-    pGirlInitPos = Vec2(50, 100);
+    pBallInitPos = Vec2(50, 270);
+    pManInitPos = Vec2(50, 200);
+    pGirl1InitPos = Vec2(50, 120);
+    pGirl2InitPos = Vec2(50, 30);
     MenuItemFont::setFontSize(13);
 
+    pBall = nullptr;
     pMan = nullptr;
-    pGirl = nullptr;
+    pGirl1 = nullptr;
+    pGirl2 = nullptr;
 }
 
 Scene* HelloWorld::createScene()
@@ -66,27 +70,33 @@ bool HelloWorld::init()
     this->addChild(wlayer);
 
     // 스프라이트 생성 및 추가
+    pBall = Sprite::create("Images/ball.png");
     pMan = Sprite::create("Images/grossini.png");
-    pGirl = Sprite::create("Images/grossinis_sister1.png");
+    pGirl1 = Sprite::create("Images/grossinis_sister1.png");
+    pGirl2 = Sprite::create("Images/grossinis_sister2.png");
+    pBall->setPosition(pBallInitPos);
     pMan->setPosition(pManInitPos);
-    pGirl->setPosition(pGirlInitPos);
-    this->addChild(pMan); this->addChild(pGirl);
+    pGirl1->setPosition(pGirl1InitPos);
+    pGirl2->setPosition(pGirl2InitPos);
+    pMan->setScale(0.5f);
+    pGirl1->setScale(0.5f);
+    pGirl2->setScale(0.5f);
+    this->addChild(pBall); this->addChild(pMan);
+    this->addChild(pGirl1); this->addChild(pGirl2);
 
 
     // action 실행 및 원상복귀 메뉴
     cocos2d::Vector<MenuItem*> items;
-    auto sequenceItem = MenuItemFont::create(" moveAndScaleUp ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(sequenceItem);
-    auto spawnItem = MenuItemFont::create(" moveWhileScaleUp ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(spawnItem);
-    auto repeatItem = MenuItemFont::create(" rotTwice ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(repeatItem);
-    auto repeatForeverItem = MenuItemFont::create(" rotForever ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(repeatForeverItem);
-    auto delayItem = MenuItemFont::create(" rotAfter2s ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(delayItem);
-    auto resetItem = MenuItemFont::create(" reset ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(resetItem);
+    auto easeItem = MenuItemFont::create(" EASE ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(easeItem);
+    auto elasticeItem = MenuItemFont::create(" ELASTICE ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(elasticeItem);
+    auto bounceItem = MenuItemFont::create(" BOUNCE ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(bounceItem);
+    auto speedItem = MenuItemFont::create(" SPEED ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(speedItem);
+    auto resetItem = MenuItemFont::create(" RESET ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(resetItem);
 
-    sequenceItem->setTag(SEQUENCE);
-    spawnItem->setTag(SPAWN);
-    repeatItem->setTag(REPEAT);
-    repeatForeverItem->setTag(REPEAT_FOREVER);
-    delayItem->setTag(DELAY);
+    easeItem->setTag(NORMAL);
+    elasticeItem->setTag(ELASTIC);
+    bounceItem->setTag(BOUNCE);
+    speedItem->setTag(SPEED);
     resetItem->setTag(RESET);
 
     auto doOrUndoMenu = Menu::createWithArray(items);
@@ -113,57 +123,54 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 void HelloWorld::doOrUndo(Ref* pSender) {
     auto item = (MenuItemFont*)pSender;
 
-    COMPOSE_ACTION action = (COMPOSE_ACTION) item->getTag();
+    EASE_ACTION action = (EASE_ACTION) item->getTag();
 
     //enum COMPOSE_ACTION
     //{
-    //    SEQUENCE,
-    //    SPAWN,
-    //    REPEAT,
-    //    REPEAT_FOREVER,
-    //    DELAY,
-    //    RESET
+        //NORMAL,
+        //ELASTIC,
+        //BOUNCE,
+        //SPEED,
+        //RESET
     //};
     if (action == RESET) {
+        pBall->removeFromParentAndCleanup(true);
         pMan->removeFromParentAndCleanup(true);
-        pGirl->removeFromParentAndCleanup(true);
+        pGirl1->removeFromParentAndCleanup(true);
+        pGirl2->removeFromParentAndCleanup(true);
+        pBall = Sprite::create("Images/ball.png");
         pMan = Sprite::create("Images/grossini.png");
-        pGirl = Sprite::create("Images/grossinis_sister1.png");
+        pGirl1 = Sprite::create("Images/grossinis_sister1.png");
+        pGirl2 = Sprite::create("Images/grossinis_sister2.png");
+        pBall->setPosition(pBallInitPos);
         pMan->setPosition(pManInitPos);
-        pGirl->setPosition(pGirlInitPos);
+        pGirl1->setPosition(pGirl1InitPos);
+        pGirl2->setPosition(pGirl2InitPos);
+        pMan->setScale(0.5f);
+        pGirl1->setScale(0.5f);
+        pGirl2->setScale(0.5f);
+        this->addChild(pBall);
         this->addChild(pMan);
-        this->addChild(pGirl);
+        this->addChild(pGirl1);
+        this->addChild(pGirl2);
         return;
     }
 
     auto move = MoveBy::create(1.0f, Vec2(100, 0));
-    auto scale = ScaleBy::create(1.0f, 2.0f);
-    auto rotate = RotateBy::create(1.0f, 90.0f);
 
-    if (action == SEQUENCE) {
-        auto seq = Sequence::create(move, scale, nullptr);
-        pMan->runAction(seq);
+    if (action == NORMAL) {
+
         return;
     }
-    if (action == SPAWN) {
-        auto sp = Spawn::create(move, scale, nullptr);
-        pMan->runAction(sp);
+    if (action == ELASTIC) {
         return;
     }
-    if (action == REPEAT) {
-        auto rp = Repeat::create(rotate, 2);
-        pMan->runAction(rp);
+    if (action == BOUNCE) {
+        
         return;
     }
-    if (action == REPEAT_FOREVER) {
-        auto rpf = RepeatForever::create(rotate); 
-        pMan->runAction(rpf);
-        return;
-    }
-    if(action == DELAY){
-        auto del = DelayTime::create(2.0f);
-        auto seq = Sequence::create(del, rotate, nullptr);
-        pMan->runAction(seq);
+    if (action == SPEED) {
+
         return;
     }
 }

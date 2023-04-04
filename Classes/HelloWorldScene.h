@@ -47,23 +47,26 @@ public:
     CREATE_FUNC(HelloWorld);
 
 private:
+    cocos2d::Sprite* pBall;
     cocos2d::Sprite* pMan;
-    cocos2d::Sprite* pGirl;
+    cocos2d::Sprite* pGirl1;
+    cocos2d::Sprite* pGirl2;
 
     cocos2d::Vec2 actionKindMenuPos;
     cocos2d::Vec2 actionDoMenuPos;
+    cocos2d::Vec2 pBallInitPos;
     cocos2d::Vec2 pManInitPos;
-    cocos2d::Vec2 pGirlInitPos;
+    cocos2d::Vec2 pGirl1InitPos;
+    cocos2d::Vec2 pGirl2InitPos;
 
     void doOrUndo(Ref* pSender);
     
-    enum COMPOSE_ACTION
+    enum EASE_ACTION
     {
-        SEQUENCE,
-        SPAWN,
-        REPEAT,
-        REPEAT_FOREVER,
-        DELAY,
+        NORMAL,
+        ELASTIC,
+        BOUNCE,
+        SPEED,
         RESET
     };
 };
