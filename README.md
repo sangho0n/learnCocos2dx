@@ -319,7 +319,7 @@ Action은 말 그대로 이동, 회전, 크기변환 등 스프라이트 및 노
 - By : 주어진 시간 동안, 시계방향으로 주어진 각도만큼 회전
 - To : 주어진 시간 동안, 주어진 각도로 회전(가장 짧은 방향)
 
-한편 각도는 육십분법으로 넘겨주어야 한다. 한가지 의문인 것은, 오픈지엘 좌표계를 따름에도 불구하고 왜 회전에서의 양의 방향이 시계방향인지는 좀 의문이다.. 이유를 알게 되면 추가하겠다.
+한편 각도는 육십분법으로 넘겨주어야 한다. 한가지 의문인 것은, 오픈지엘 좌표계를 따름에도 불구하고 왜 회전에서의 양의 방향이 시계방향인지는 좀 의문이다.. 이유를 알게 되면 추가하겠다. ~친절한 챗지피티 왈 : 코코스가 오픈지엘을 사용하는 것은 맞지만, 시계방향을 회전에 있어 양의 방향으로 설정하는 것이 일반인에게 있어 좀 더 이해하기 쉬워서 그렇게 한 것이 아닐까...~
 
 -90 방향으로 1번 및 2번 회전시킨 경우(남자는 To, 여자는 By; 여자가 반시계방향으로 돌아감)
 
@@ -363,6 +363,25 @@ Action은 말 그대로 이동, 회전, 크기변환 등 스프라이트 및 노
 
 
 ![복합액션](https://user-images.githubusercontent.com/54069713/229723759-c572a9b8-3b9d-4c54-a12e-3ed0c9912837.gif)
+
+## 이즈 액션
+재생속도를 조절할 수 있는 액션. Ease 접두사가 붙은 것 말고도 Speed로도 액션의 속도를 조절할 수 있다. 이즈액션은 마치 물리엔진이 적용되있는 것처럼 스프라이트를 움직이고싶을 때 사용할 수 있다. [출처](https://docs.cocos2d-x.org/cocos2d-x/v4/en/actions/basic.html)
+
+접미사 In, Out, InOut에 따라 속도가 변하는 형태가 다르다.
+- In : 천천히->빨라짐
+- Out : 빠름->느려짐
+- InOut : 느림->빨라짐->느려짐
+
+![image](https://user-images.githubusercontent.com/54069713/229844138-043c4ceb-f65d-4672-8b4c-c02ca2250b0f.png)
+
+~어떤 이유에서인지 EaseIn과 EaseOut, EaseInOut은 예상과 반대로 움직인다. 이유를 알게되면 추가할 것.~
+
+여러 이즈 액션들을 사용하는 모습. 맨 위부터 차례대로 MoveBy, ~In, ~Out, ~InOut 액션에 해당한다.
+(단, Speed의 경우 1배, 2배, 3배, 4배)
+
+![이즈액션](https://user-images.githubusercontent.com/54069713/229841492-843395a3-ce1b-4686-9641-2c266f55d4ce.gif)
+
+일반적인 Ease, EaseElastic, EaseBounce, EaseBack 말고도 EaseExponential, EaseSine, EaseQuadratic, EaseQuartic, EaseQuintic, EaseCircle, EaseCubic 등의 액션들이 존재한다. 각각에 대한 자세한 설명은 [공식문서](https://docs.cocos2d-x.org/api-ref/cplusplus/V4.0/db/dcf/classcocos2d_1_1_action_ease.html)를 참고할 것.
 
 -------
 # 애니메이션
