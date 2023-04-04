@@ -346,6 +346,23 @@ Action은 말 그대로 이동, 회전, 크기변환 등 스프라이트 및 노
 - To : 주어진 시간 동안 주어진 Color3B(혹은 r, g, b)로 변화
 
 ## 복합 액션
+### Sequence
+주어진 순서대로(배열로 주어진 경우 0번 인덱스부터 순차적으로) 액션 실행. DelayTime*를 인자로 넣어주면 시간 지연도 가능함.
+### Spawn
+동시에 모든 액션 실행.
+### Repeat
+- Repeat::create(FinitTimeAction*, uint)
+
+주어진 액션을 주어진 횟수만큼 반복
+
+- RepeatForever::create(ActionInterval*)
+
+주어진 액션을 무한정 반복
+
+스폰, 시퀀스, 리피트 등을 적절히 이용하여 애니메이션을 구현한 모습
+
+
+![복합액션](https://user-images.githubusercontent.com/54069713/229723759-c572a9b8-3b9d-4c54-a12e-3ed0c9912837.gif)
 
 -------
 # 애니메이션
