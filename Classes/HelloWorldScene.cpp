@@ -33,7 +33,6 @@ HelloWorld::HelloWorld() {
     actionDoMenuPos = Vec2(400, 200);
     pManInitPos = Vec2(50, 220);
     pGirlInitPos = Vec2(50, 100);
-    actionKind = " move ";
     MenuItemFont::setFontSize(13);
 
     pMan = nullptr;
@@ -66,41 +65,31 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
     this->addChild(wlayer);
 
-    // 스프라이트 생성 및 추가새
+    // 스프라이트 생성 및 추가
     pMan = Sprite::create("Images/grossini.png");
     pGirl = Sprite::create("Images/grossinis_sister1.png");
     pMan->setPosition(pManInitPos);
     pGirl->setPosition(pGirlInitPos);
-    originColorMan = pMan->getColor();
-    originColorGirl = pGirl->getColor();
     this->addChild(pMan); this->addChild(pGirl);
 
-    // action 종류 선택 메뉴
-    auto moveActionItem = MenuItemFont::create(" move ", CC_CALLBACK_1(HelloWorld::actionKindChange, this)); moveActionItem->setColor(Color3B::BLACK);
-    auto jumpActionItem = MenuItemFont::create(" jump ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
-    auto bezierActionItem = MenuItemFont::create(" bezier ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
-    auto placeActionItem = MenuItemFont::create(" place ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
-    auto scaleActionItem = MenuItemFont::create(" scale ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
-    auto rotateActionItem = MenuItemFont::create(" rotate ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
-    auto showHideActionItem = MenuItemFont::create(" show/hide ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
-    auto blinkActionItem = MenuItemFont::create(" blink ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
-    auto fadeActionItem = MenuItemFont::create(" fade ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
-    auto tintActionItem = MenuItemFont::create(" tint ", CC_CALLBACK_1(HelloWorld::actionKindChange, this));
-
-    auto actionKindMenu = Menu::create(moveActionItem, jumpActionItem, bezierActionItem, placeActionItem, scaleActionItem, rotateActionItem,
-        showHideActionItem, blinkActionItem, fadeActionItem, tintActionItem, nullptr);
-    actionKindMenu->setName("actionKindMenu");
-    actionKindMenu->setPosition(actionKindMenuPos);
-    actionKindMenu->alignItemsHorizontally();
-    this->addChild(actionKindMenu);
 
     // action 실행 및 원상복귀 메뉴
-    auto doItem = MenuItemFont::create(" do ", CC_CALLBACK_1(HelloWorld::doOrUndo, this));
-    auto resetItem = MenuItemFont::create(" reset ", CC_CALLBACK_1(HelloWorld::doOrUndo, this));
-    doItem->setTag(1);
-    resetItem->setTag(2);
+    cocos2d::Vector<MenuItem*> items;
+    auto sequenceItem = MenuItemFont::create(" moveAndScaleUp ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(sequenceItem);
+    auto spawnItem = MenuItemFont::create(" moveWhileScaleUp ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(spawnItem);
+    auto repeatItem = MenuItemFont::create(" rotTwice ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(repeatItem);
+    auto repeatForeverItem = MenuItemFont::create(" rotForever ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(repeatForeverItem);
+    auto delayItem = MenuItemFont::create(" rotAfter2s ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(delayItem);
+    auto resetItem = MenuItemFont::create(" reset ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(resetItem);
 
-    auto doOrUndoMenu = Menu::create(doItem, resetItem, nullptr);
+    sequenceItem->setTag(SEQUENCE);
+    spawnItem->setTag(SPAWN);
+    repeatItem->setTag(REPEAT);
+    repeatForeverItem->setTag(REPEAT_FOREVER);
+    delayItem->setTag(DELAY);
+    resetItem->setTag(RESET);
+
+    auto doOrUndoMenu = Menu::createWithArray(items);
     doOrUndoMenu->setPosition(actionDoMenuPos);
     doOrUndoMenu->alignItemsVertically();
     this->addChild(doOrUndoMenu);
@@ -119,31 +108,23 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
-
-}
-
-void HelloWorld::actionKindChange(Ref * pSender) {
-    auto pMenuItem = (MenuItemFont*)pSender;
-    auto pMenuItemLabel = (Label*)pMenuItem->getLabel();
-    actionKind = pMenuItemLabel->getString();
-
-    auto actionKindMenu = getChildByName<Menu*>("actionKindMenu");
-    for (auto elem : actionKindMenu->getChildren()) {
-        auto item = (MenuItemFont*)elem;
-        item->setColor(Color3B::WHITE);
-        auto tempstr = ((Label*)item->getLabel())->getString();
-        if (actionKind == tempstr) item->setColor(Color3B::BLACK);
-    }
-
-    return;
 }
 
 void HelloWorld::doOrUndo(Ref* pSender) {
-    allocateActions();
     auto item = (MenuItemFont*)pSender;
 
-    if (item->getTag() == 2) {
-        // reset
+    COMPOSE_ACTION action = (COMPOSE_ACTION) item->getTag();
+
+    //enum COMPOSE_ACTION
+    //{
+    //    SEQUENCE,
+    //    SPAWN,
+    //    REPEAT,
+    //    REPEAT_FOREVER,
+    //    DELAY,
+    //    RESET
+    //};
+    if (action == RESET) {
         pMan->removeFromParentAndCleanup(true);
         pGirl->removeFromParentAndCleanup(true);
         pMan = Sprite::create("Images/grossini.png");
@@ -155,90 +136,34 @@ void HelloWorld::doOrUndo(Ref* pSender) {
         return;
     }
 
-    // moveActionItem, jumpActionItem, bezierActionItem, placeActionItem, scaleActionItem, rotateActionItem,
-    // showHideActionItem, blinkActionItem, fadeActionItem, tintActionItem
-    if (actionKind == " move ") {
-        pMan->runAction(myMoveTo);
-        pGirl->runAction(myMoveBy);
+    auto move = MoveBy::create(1.0f, Vec2(100, 0));
+    auto scale = ScaleBy::create(1.0f, 2.0f);
+    auto rotate = RotateBy::create(1.0f, 90.0f);
+
+    if (action == SEQUENCE) {
+        auto seq = Sequence::create(move, scale, nullptr);
+        pMan->runAction(seq);
         return;
     }
-    if (actionKind == " jump ") {
-        pMan->runAction(myJumpTo);
-        pGirl->runAction(myJumpBy);
+    if (action == SPAWN) {
+        auto sp = Spawn::create(move, scale, nullptr);
+        pMan->runAction(sp);
         return;
     }
-    if (actionKind == " bezier ") {
-        pMan->runAction(myBezierTo);
-        pGirl->runAction(myBezierBy);
+    if (action == REPEAT) {
+        auto rp = Repeat::create(rotate, 2);
+        pMan->runAction(rp);
         return;
     }
-    if (actionKind == " place ") {
-        pMan->runAction(myPlace);
-        log("Place action does not have by or to");
+    if (action == REPEAT_FOREVER) {
+        auto rpf = RepeatForever::create(rotate); 
+        pMan->runAction(rpf);
         return;
     }
-    if (actionKind == " scale ") {
-        pMan->runAction(myScaleTo);
-        pGirl->runAction(myScaleBy);
+    if(action == DELAY){
+        auto del = DelayTime::create(2.0f);
+        auto seq = Sequence::create(del, rotate, nullptr);
+        pMan->runAction(seq);
         return;
     }
-    if (actionKind == " rotate ") {
-        pMan->runAction(myRotateTo);
-        pGirl->runAction(myRotateBy);
-        return;
-    }
-    if (actionKind == " show/hide ") {
-        pMan->runAction(myShow);
-        pMan->runAction(myHide);
-        return;
-    }
-    if (actionKind == " blink ") {
-        pMan->runAction(myBlink);
-        log("Blink action does not have by or to");
-        return;
-    }
-    if (actionKind == " fade ") {
-        pMan->runAction(myFadeOut);
-        //pGirl->runAction(myFadeOut);
-        return;
-    }
-    if (actionKind == " tint ") {
-        pMan->runAction(myTintTo);
-        pGirl->runAction(myTintBy);
-        return;
-    }
-}
-
-void HelloWorld::allocateActions() {
-    myMoveTo = MoveTo::create(2, Vec2(400, 0));
-    myMoveBy = MoveBy::create(2, Vec2(400, 0));
-
-    myJumpTo = JumpTo::create(2, Vec2(400, 0), 50, 3);
-    myJumpBy = JumpBy::create(2, Vec2(400, 0), 50, 3);
-
-    ccBezierConfig bzConf;
-    bzConf.controlPoint_1 = Vec2(150, 150);
-    bzConf.controlPoint_2 = Vec2(300, -150);
-    bzConf.endPosition = Vec2(400, 0);
-    myBezierTo = BezierTo::create(2, bzConf);
-    myBezierBy = BezierBy::create(2, bzConf);
-
-    myPlace = Place::create(Vec2(400, 160));
-
-    myScaleTo = ScaleTo::create(2, 1.2f);
-    myScaleBy = ScaleBy::create(2, 1.2f);
-
-    myRotateTo = RotateTo::create(2, -90);
-    myRotateBy = RotateBy::create(2, -90);
-
-    myShow = Show::create();
-    myHide = Hide::create();
-
-    myBlink = Blink::create(2, 6);
-
-    myFadeOut = FadeOut::create(2);
-    myFadeIn = FadeIn::create(1);
-
-    myTintTo = TintTo::create(2, Color3B::BLACK);
-    myTintBy = TintBy::create(2, -50, -50, -50);
 }

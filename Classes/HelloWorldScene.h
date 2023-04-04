@@ -54,45 +54,18 @@ private:
     cocos2d::Vec2 actionDoMenuPos;
     cocos2d::Vec2 pManInitPos;
     cocos2d::Vec2 pGirlInitPos;
-    std::string actionKind;
 
-    void actionKindChange(Ref* pSender);
     void doOrUndo(Ref* pSender);
-
-    // moveActionItem, jumpActionItem, bezierActionItem, placeActionItem, scaleActionItem, rotateActionItem,
-    // showHideActionItem, blinkActionItem, fadeActionItem, tintActionItem
-    cocos2d::MoveTo* myMoveTo;
-    cocos2d::MoveBy* myMoveBy;
-
-    cocos2d::JumpTo* myJumpTo;
-    cocos2d::JumpBy* myJumpBy;
-
-    cocos2d::BezierTo* myBezierTo;
-    cocos2d::BezierBy* myBezierBy;
-
-    cocos2d::Place* myPlace;
-
-    cocos2d::ScaleTo* myScaleTo;
-    cocos2d::ScaleBy* myScaleBy;
-
-    cocos2d::RotateTo* myRotateTo;
-    cocos2d::RotateBy* myRotateBy;
-
-    cocos2d::Show* myShow;
-    cocos2d::Hide* myHide;
-
-    cocos2d::Blink* myBlink;
-
-    cocos2d::FadeOut* myFadeOut;
-    cocos2d::FadeIn* myFadeIn;
-
-    cocos2d::TintTo* myTintTo;
-    cocos2d::TintBy* myTintBy;
-
-    cocos2d::Color3B originColorMan;
-    cocos2d::Color3B originColorGirl;
-
-    void allocateActions();
+    
+    enum COMPOSE_ACTION
+    {
+        SEQUENCE,
+        SPAWN,
+        REPEAT,
+        REPEAT_FOREVER,
+        DELAY,
+        RESET
+    };
 };
 
 #endif // __HELLOWORLD_SCENE_H__
