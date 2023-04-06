@@ -125,14 +125,7 @@ void HelloWorld::doOrUndo(Ref* pSender) {
     //    RESET
     //};
     if (action == RESET) {
-        pMan->removeFromParentAndCleanup(true);
-        pGirl->removeFromParentAndCleanup(true);
-        pMan = Sprite::create("Images/grossini.png");
-        pGirl = Sprite::create("Images/grossinis_sister1.png");
-        pMan->setPosition(pManInitPos);
-        pGirl->setPosition(pGirlInitPos);
-        this->addChild(pMan);
-        this->addChild(pGirl);
+        reInitSprite();
         return;
     }
 
@@ -141,7 +134,7 @@ void HelloWorld::doOrUndo(Ref* pSender) {
     auto rotate = RotateBy::create(1.0f, 90.0f);
 
     if (action == SEQUENCE) {
-        auto seq = Sequence::create(move, scale, nullptr);
+        auto seq = Sequence::create(move, scale, CallFunc::create(CC_CALLBACK_0(HelloWorld::reInitSpriteWithSender, this, pMan)), nullptr);
         pMan->runAction(seq);
         return;
     }
@@ -162,8 +155,38 @@ void HelloWorld::doOrUndo(Ref* pSender) {
     }
     if(action == DELAY){
         auto del = DelayTime::create(2.0f);
-        auto seq = Sequence::create(del, rotate, nullptr);
+        auto seq = Sequence::create(del, rotate, CallFunc::create(CC_CALLBACK_0(HelloWorld::reInitSpriteWithSender, this, pMan)), nullptr);
         pMan->runAction(seq);
         return;
     }
+}
+
+void HelloWorld::reInitSprite() {
+    pMan->removeFromParentAndCleanup(true);
+    pGirl->removeFromParentAndCleanup(true);
+    pMan = Sprite::create("Images/grossini.png");
+    pGirl = Sprite::create("Images/grossinis_sister1.png");
+    pMan->setPosition(pManInitPos);
+    pGirl->setPosition(pGirlInitPos);
+    this->addChild(pMan);
+    this->addChild(pGirl);
+}
+
+void HelloWorld::reInitSpriteWithSender(Ref* sender) {
+    auto sprite = (Sprite*)sender;
+
+    auto newSprite = Sprite::create(sprite->getResourceName());
+    this->addChild(newSprite);
+    if (newSprite->getResourceName().find("sister") != std::string::npos) {
+        newSprite->setPosition(pGirlInitPos);
+        pGirl->removeFromParentAndCleanup(true);
+        pGirl = newSprite;
+    }
+    else {
+        newSprite->setPosition(pManInitPos);
+        pMan->removeFromParentAndCleanup(true);
+        pMan = newSprite;
+    }
+
+    sprite->removeFromParent();
 }

@@ -66,6 +66,9 @@ private:
         DELAY,
         RESET
     };
+
+    void reInitSprite();
+    void reInitSpriteWithSender(Ref* sender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__
