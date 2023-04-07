@@ -26,6 +26,19 @@
 
 USING_NS_CC;
 
+HelloWorld::HelloWorld() {
+    // 초기 위치 지정
+    // default scene size 480, 320
+    actionKindMenuPos = Vec2(240, 300);
+    actionDoMenuPos = Vec2(400, 200);
+    pManInitPos = Vec2(50, 220);
+    pGirlInitPos = Vec2(50, 100);
+    MenuItemFont::setFontSize(13);
+
+    pMan = nullptr;
+    pGirl = nullptr;
+}
+
 Scene* HelloWorld::createScene()
 {
     return HelloWorld::create();
@@ -48,29 +61,38 @@ bool HelloWorld::init()
         return false;
     }
 
+    // 씬 레이어 크기 지정
     auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
     this->addChild(wlayer);
 
-    auto pMenuItem1 = MenuItemFont::create(
-        " generate ",
-        CC_CALLBACK_1(HelloWorld::doClick1, this)
-    );
+    // 스프라이트 생성 및 추가
+    pMan = Sprite::create("Images/grossini.png");
+    pGirl = Sprite::create("Images/grossinis_sister1.png");
+    pMan->setPosition(pManInitPos);
+    pGirl->setPosition(pGirlInitPos);
+    this->addChild(pMan); this->addChild(pGirl);
 
-    pMenuItem1->setColor(Color3B::BLACK);
 
-    auto pMenuItem2 = MenuItemFont::create(
-        " remove ",
-        CC_CALLBACK_1(HelloWorld::doClick1, this)
-    );
-    pMenuItem2->setColor(Color3B::BLACK);
+    // action 실행 및 원상복귀 메뉴
+    cocos2d::Vector<MenuItem*> items;
+    auto sequenceItem = MenuItemFont::create(" moveAndScaleUp ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(sequenceItem);
+    auto spawnItem = MenuItemFont::create(" moveWhileScaleUp ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(spawnItem);
+    auto repeatItem = MenuItemFont::create(" rotTwice ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(repeatItem);
+    auto repeatForeverItem = MenuItemFont::create(" rotForever ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(repeatForeverItem);
+    auto delayItem = MenuItemFont::create(" rotAfter2s ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(delayItem);
+    auto resetItem = MenuItemFont::create(" reset ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(resetItem);
 
-    pMenuItem1->setTag(1);
-    pMenuItem2->setTag(2);
+    sequenceItem->setTag(SEQUENCE);
+    spawnItem->setTag(SPAWN);
+    repeatItem->setTag(REPEAT);
+    repeatForeverItem->setTag(REPEAT_FOREVER);
+    delayItem->setTag(DELAY);
+    resetItem->setTag(RESET);
 
-    auto pMenu = Menu::create(pMenuItem1, pMenuItem2, nullptr);
-
-    pMenu->alignItemsVertically();
-    this->addChild(pMenu);
+    auto doOrUndoMenu = Menu::createWithArray(items);
+    doOrUndoMenu->setPosition(actionDoMenuPos);
+    doOrUndoMenu->alignItemsVertically();
+    this->addChild(doOrUndoMenu);
 
     return true;
 }
@@ -86,30 +108,85 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
-
 }
 
-void HelloWorld::doClick1(Ref* pSender) {
-    auto item = (MenuItem*) pSender;
-    int tag = item->getTag();
+void HelloWorld::doOrUndo(Ref* pSender) {
+    auto item = (MenuItemFont*)pSender;
 
-    if (tag == 1) {
-        auto pMan = Sprite::create("Images/grossini.png");
+    COMPOSE_ACTION action = (COMPOSE_ACTION) item->getTag();
 
-        pMan->setPosition(Vec2(100, 160));
-        pMan->setTag(11);
-        this->addChild(pMan);
+    //enum COMPOSE_ACTION
+    //{
+    //    SEQUENCE,
+    //    SPAWN,
+    //    REPEAT,
+    //    REPEAT_FOREVER,
+    //    DELAY,
+    //    RESET
+    //};
+    if (action == RESET) {
+        reInitSprite();
+        return;
+    }
+
+    auto move = MoveBy::create(1.0f, Vec2(100, 0));
+    auto scale = ScaleBy::create(1.0f, 2.0f);
+    auto rotate = RotateBy::create(1.0f, 90.0f);
+
+    if (action == SEQUENCE) {
+        auto seq = Sequence::create(move, scale, CallFunc::create(CC_CALLBACK_0(HelloWorld::reInitSpriteWithSender, this, pMan)), nullptr);
+        pMan->runAction(seq);
+        return;
+    }
+    if (action == SPAWN) {
+        auto sp = Spawn::create(move, scale, nullptr);
+        pMan->runAction(sp);
+        return;
+    }
+    if (action == REPEAT) {
+        auto rp = Repeat::create(rotate, 2);
+        pMan->runAction(rp);
+        return;
+    }
+    if (action == REPEAT_FOREVER) {
+        auto rpf = RepeatForever::create(rotate); 
+        pMan->runAction(rpf);
+        return;
+    }
+    if(action == DELAY){
+        auto del = DelayTime::create(2.0f);
+        auto seq = Sequence::create(del, rotate, CallFunc::create(CC_CALLBACK_0(HelloWorld::reInitSpriteWithSender, this, pMan)), nullptr);
+        pMan->runAction(seq);
+        return;
+    }
+}
+
+void HelloWorld::reInitSprite() {
+    pMan->removeFromParentAndCleanup(true);
+    pGirl->removeFromParentAndCleanup(true);
+    pMan = Sprite::create("Images/grossini.png");
+    pGirl = Sprite::create("Images/grossinis_sister1.png");
+    pMan->setPosition(pManInitPos);
+    pGirl->setPosition(pGirlInitPos);
+    this->addChild(pMan);
+    this->addChild(pGirl);
+}
+
+void HelloWorld::reInitSpriteWithSender(Ref* sender) {
+    auto sprite = (Sprite*)sender;
+
+    auto newSprite = Sprite::create(sprite->getResourceName());
+    this->addChild(newSprite);
+    if (newSprite->getResourceName().find("sister") != std::string::npos) {
+        newSprite->setPosition(pGirlInitPos);
+        pGirl->removeFromParentAndCleanup(true);
+        pGirl = newSprite;
     }
     else {
-        auto pMan = getChildByTag<Sprite*>(11);
-
-        this->removeChild(pMan);
+        newSprite->setPosition(pManInitPos);
+        pMan->removeFromParentAndCleanup(true);
+        pMan = newSprite;
     }
-    return;
-}
 
-void HelloWorld::doClick2(Ref* pSender) {
-    // do sth
-    log("do click 2");
-    return;
+    sprite->removeFromParent();
 }
