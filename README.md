@@ -383,6 +383,15 @@ Action은 말 그대로 이동, 회전, 크기변환 등 스프라이트 및 노
 
 일반적인 Ease, EaseElastic, EaseBounce, EaseBack 말고도 EaseExponential, EaseSine, EaseQuadratic, EaseQuartic, EaseQuintic, EaseCircle, EaseCubic 등의 액션들이 존재한다. 각각에 대한 자세한 설명은 [공식문서](https://docs.cocos2d-x.org/api-ref/cplusplus/V4.0/db/dcf/classcocos2d_1_1_action_ease.html)를 참고할 것.
 
+## CallFunc
+CallFunc 인스턴스를 이용하면 복합 액션에 사용자가 원하는 메서드를 등록할 수 있다.
+
+브랜치 6.3 예시에서 Sequnce 액션에 원하는 CallFunc 인스턴스(이 예시에서는 Sender를 원래 위치로 돌려놓는다)를 단 모습.
+
+![CallFunc](https://user-images.githubusercontent.com/54069713/230562934-597049c1-a224-4c4c-97ca-7dc83c025eda.gif)
+
+Sequence를 사용한 액션인 moveAndScaleUp과 rotAfter2s 메뉴아이템을 눌렀을 때는 reset 메뉴아이템을 누르지 않아도 원래 위치로 돌아가지만, rotTwice 메뉴아이템은 Sequence가 아닌 Repeat을 사용한 액션이기 때문에 자동으로 원래 위치로 돌아가지 않는다.
+
 -------
 # 애니메이션
 -------
