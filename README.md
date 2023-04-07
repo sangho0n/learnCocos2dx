@@ -374,12 +374,12 @@ Action은 말 그대로 이동, 회전, 크기변환 등 스프라이트 및 노
 
 ![image](https://user-images.githubusercontent.com/54069713/229844138-043c4ceb-f65d-4672-8b4c-c02ca2250b0f.png)
 
-~어떤 이유에서인지 EaseIn과 EaseOut, EaseInOut은 예상과 반대로 움직인다. 이유를 알게되면 추가할 것.~
-
 여러 이즈 액션들을 사용하는 모습. 맨 위부터 차례대로 MoveBy, ~In, ~Out, ~InOut 액션에 해당한다.
 (단, Speed의 경우 1배, 2배, 3배, 4배)
 
 ![이즈액션](https://user-images.githubusercontent.com/54069713/229841492-843395a3-ce1b-4686-9641-2c266f55d4ce.gif)
+
+위 gif에서 일반적인 EaseIn과 EaseOut, EaseInOut은 반대로 움직이는데, 그 이유는 이번 예제에서는 rate을 0.4f로 주었기 때문이다. rate을 1이 넘는 값을 준다면 의도한 대로 동작한다.
 
 일반적인 Ease, EaseElastic, EaseBounce, EaseBack 말고도 EaseExponential, EaseSine, EaseQuadratic, EaseQuartic, EaseQuintic, EaseCircle, EaseCubic 등의 액션들이 존재한다. 각각에 대한 자세한 설명은 [공식문서](https://docs.cocos2d-x.org/api-ref/cplusplus/V4.0/db/dcf/classcocos2d_1_1_action_ease.html)를 참고할 것.
 
