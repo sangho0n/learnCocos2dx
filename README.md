@@ -394,6 +394,20 @@ Sequence를 사용한 액션인 moveAndScaleUp과 rotAfter2s 메뉴아이템을 
 
 -------
 # 애니메이션
+## Animation과 Animate
+- Animation : 어떤 애니메이션이 재생되는지 명세하는 클래스. 프레임단위로 지정할 수 있으며, 프레임 사이 시간도 조정할 수 있다.
+- Animate : 지정된 애니메이션의 재생 정보를 담는 클래스.
+
+애니메이션의 프레임은 하나씩 지정할 수도 있고, 아틀라스(스프라이트 시트)로 묶인 파일로 지정할 수도 있으며, plist파일로 불러올 수도 있다.
+
+아틀라스로 프레임들을 지정할 때는 1. Sprite::getTexture() 메서드를 통해 텍스쳐를 부르거나, 2. 텍스쳐캐시에 이미지를 등록한 후 사용하여야 한다. 이후 Animation::addSpriteFrameWithTexture 메서드를 이용하여 프레임들을 지정할 수 있다.
+
+plist파일을 이용할 때는 스프라이트 프레임 캐시에 plist 파일을 등록한 후(spriteFrameCache->addSpriteFramesWithFile 메서드), plist파일에 등록되어 있는 이름을 이용하여 애니메이션 프레임들을 지정할 수 있다.
+
+아틀라스와 plist 파일을 이용한 애니메이션들의 구동 모습
+
+![Animation](https://user-images.githubusercontent.com/54069713/232326541-ad31470e-d219-45f5-9a0f-8130457c9006.gif)
+
 -------
 # 스프라이트 캐시
 -------
@@ -416,7 +430,7 @@ Sequence를 사용한 액션인 moveAndScaleUp과 rotAfter2s 메뉴아이템을 
 # 데이터 저장
 -------
 # 사용자 입력
--------
+-------ptjem
 # 스크롤
 -------
 # 테이블
