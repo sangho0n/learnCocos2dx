@@ -47,28 +47,9 @@ public:
     CREATE_FUNC(HelloWorld);
 
 private:
+    void atlasCallBack(Ref* sender);
+    void plistCallBack(Ref* semder);
     cocos2d::Sprite* pMan;
-    cocos2d::Sprite* pGirl;
-
-    cocos2d::Vec2 actionKindMenuPos;
-    cocos2d::Vec2 actionDoMenuPos;
-    cocos2d::Vec2 pManInitPos;
-    cocos2d::Vec2 pGirlInitPos;
-
-    void doOrUndo(Ref* pSender);
-    
-    enum COMPOSE_ACTION
-    {
-        SEQUENCE,
-        SPAWN,
-        REPEAT,
-        REPEAT_FOREVER,
-        DELAY,
-        RESET
-    };
-
-    void reInitSprite();
-    void reInitSpriteWithSender(Ref* sender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

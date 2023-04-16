@@ -27,16 +27,6 @@
 USING_NS_CC;
 
 HelloWorld::HelloWorld() {
-    // 초기 위치 지정
-    // default scene size 480, 320
-    actionKindMenuPos = Vec2(240, 300);
-    actionDoMenuPos = Vec2(400, 200);
-    pManInitPos = Vec2(50, 220);
-    pGirlInitPos = Vec2(50, 100);
-    MenuItemFont::setFontSize(13);
-
-    pMan = nullptr;
-    pGirl = nullptr;
 }
 
 Scene* HelloWorld::createScene()
@@ -67,32 +57,20 @@ bool HelloWorld::init()
 
     // 스프라이트 생성 및 추가
     pMan = Sprite::create("Images/grossini.png");
-    pGirl = Sprite::create("Images/grossinis_sister1.png");
-    pMan->setPosition(pManInitPos);
-    pGirl->setPosition(pGirlInitPos);
-    this->addChild(pMan); this->addChild(pGirl);
+    pMan->setPosition(Vec2(240, 160));
+    this->addChild(pMan); 
 
 
-    // action 실행 및 원상복귀 메뉴
-    cocos2d::Vector<MenuItem*> items;
-    auto sequenceItem = MenuItemFont::create(" moveAndScaleUp ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(sequenceItem);
-    auto spawnItem = MenuItemFont::create(" moveWhileScaleUp ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(spawnItem);
-    auto repeatItem = MenuItemFont::create(" rotTwice ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(repeatItem);
-    auto repeatForeverItem = MenuItemFont::create(" rotForever ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(repeatForeverItem);
-    auto delayItem = MenuItemFont::create(" rotAfter2s ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(delayItem);
-    auto resetItem = MenuItemFont::create(" reset ", CC_CALLBACK_1(HelloWorld::doOrUndo, this)); items.pushBack(resetItem);
 
-    sequenceItem->setTag(SEQUENCE);
-    spawnItem->setTag(SPAWN);
-    repeatItem->setTag(REPEAT);
-    repeatForeverItem->setTag(REPEAT_FOREVER);
-    delayItem->setTag(DELAY);
-    resetItem->setTag(RESET);
+    // atlas 애니메이션, plist 애니메이션
+    auto atlasItem = MenuItemFont::create(" Atlas ", CC_CALLBACK_1(HelloWorld::atlasCallBack, this));
 
-    auto doOrUndoMenu = Menu::createWithArray(items);
-    doOrUndoMenu->setPosition(actionDoMenuPos);
-    doOrUndoMenu->alignItemsVertically();
-    this->addChild(doOrUndoMenu);
+    auto plistItem = MenuItemFont::create(" Plist ", CC_CALLBACK_1(HelloWorld::plistCallBack, this));
+
+    auto runMenu = Menu::create(atlasItem, plistItem, nullptr);
+    runMenu->setPosition(Vec2(240, 80));
+    runMenu->alignItemsHorizontally();
+    this->addChild(runMenu);
 
     return true;
 }
@@ -110,83 +88,44 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 }
 
-void HelloWorld::doOrUndo(Ref* pSender) {
-    auto item = (MenuItemFont*)pSender;
+void HelloWorld::atlasCallBack(Ref* sender) {
+    auto animation = Animation::create(); animation->setDelayPerUnit(0.3f);
+    // 디렉터를 이용해 텍스처를 만드는 방법. 이 방법을 쓰면, 스프라이트 생성 시 위에서 파일을 다시 한번 불러오지 않고도, 캐시에 저장되어있는 것을 활용할 수 있음
+    auto texture = Director::getInstance()->getTextureCache()->addImage("Images/grossini_dance_atlas.png");
+    // 스프라이트를 통해 택스쳐를 만드는 방법
+    //auto sprite = Sprite::create("Images/grossini_dance_atlas.png");
+    //auto texture1 = sprite->getTexture();
 
-    COMPOSE_ACTION action = (COMPOSE_ACTION) item->getTag();
+    for (int i = 0; i < 14; i++) {
+        int col = i % 5;
+        int row = i / 5;
 
-    //enum COMPOSE_ACTION
-    //{
-    //    SEQUENCE,
-    //    SPAWN,
-    //    REPEAT,
-    //    REPEAT_FOREVER,
-    //    DELAY,
-    //    RESET
-    //};
-    if (action == RESET) {
-        reInitSprite();
-        return;
+        animation->addSpriteFrameWithTexture(texture, Rect(col * 85, row * 121, 85, 121));
     }
 
-    auto move = MoveBy::create(1.0f, Vec2(100, 0));
-    auto scale = ScaleBy::create(1.0f, 2.0f);
-    auto rotate = RotateBy::create(1.0f, 90.0f);
-
-    if (action == SEQUENCE) {
-        auto seq = Sequence::create(move, scale, CallFunc::create(CC_CALLBACK_0(HelloWorld::reInitSpriteWithSender, this, pMan)), nullptr);
-        pMan->runAction(seq);
-        return;
-    }
-    if (action == SPAWN) {
-        auto sp = Spawn::create(move, scale, nullptr);
-        pMan->runAction(sp);
-        return;
-    }
-    if (action == REPEAT) {
-        auto rp = Repeat::create(rotate, 2);
-        pMan->runAction(rp);
-        return;
-    }
-    if (action == REPEAT_FOREVER) {
-        auto rpf = RepeatForever::create(rotate); 
-        pMan->runAction(rpf);
-        return;
-    }
-    if(action == DELAY){
-        auto del = DelayTime::create(2.0f);
-        auto seq = Sequence::create(del, rotate, CallFunc::create(CC_CALLBACK_0(HelloWorld::reInitSpriteWithSender, this, pMan)), nullptr);
-        pMan->runAction(seq);
-        return;
-    }
+    auto anim = Animate::create(animation);
+    pMan->runAction(anim);
 }
 
-void HelloWorld::reInitSprite() {
-    pMan->removeFromParentAndCleanup(true);
-    pGirl->removeFromParentAndCleanup(true);
-    pMan = Sprite::create("Images/grossini.png");
-    pGirl = Sprite::create("Images/grossinis_sister1.png");
-    pMan->setPosition(pManInitPos);
-    pGirl->setPosition(pGirlInitPos);
-    this->addChild(pMan);
-    this->addChild(pGirl);
-}
+void HelloWorld::plistCallBack(Ref* sender) {
+    auto cache = SpriteFrameCache::getInstance(); // singletone
+    cache->addSpriteFramesWithFile("animations/grossini.plist");
 
-void HelloWorld::reInitSpriteWithSender(Ref* sender) {
-    auto sprite = (Sprite*)sender;
+    Vector<SpriteFrame*> animFrames;
 
-    auto newSprite = Sprite::create(sprite->getResourceName());
-    this->addChild(newSprite);
-    if (newSprite->getResourceName().find("sister") != std::string::npos) {
-        newSprite->setPosition(pGirlInitPos);
-        pGirl->removeFromParentAndCleanup(true);
-        pGirl = newSprite;
-    }
-    else {
-        newSprite->setPosition(pManInitPos);
-        pMan->removeFromParentAndCleanup(true);
-        pMan = newSprite;
+    std::string str;
+    for (int i = 1; i < 15; i++) {
+        if (i < 10)
+            str = ("grossini_dance_0" + std::to_string(i));
+        else
+            str = "grossini_dance_" + std::to_string(i);
+        str += ".png";
+
+        SpriteFrame* frame = cache->getSpriteFrameByName(str);
+        animFrames.pushBack(frame);
     }
 
-    sprite->removeFromParent();
+    auto animation = Animation::createWithSpriteFrames(animFrames); animation->setDelayPerUnit(0.3f);
+    auto animate = Animate::create(animation);
+    pMan->runAction(animate);
 }
