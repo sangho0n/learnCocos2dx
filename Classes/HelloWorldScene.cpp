@@ -55,6 +55,28 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
     this->addChild(wlayer);
 
+    // Sprite Frame Cache 
+
+    auto sfcache = SpriteFrameCache::getInstance();
+
+    sfcache->addSpriteFramesWithFile("animations/grossini_family.plist");
+    sfcache->addSpriteFramesWithFile("animations/grossini.plist");
+    auto pSprite = SpriteFrame::create("images/blocks9.png", Rect(0, 0, 96, 96));
+    sfcache->addSpriteFrame(pSprite, "blocks9.png");
+
+    auto pWoman = Sprite::createWithSpriteFrameName("grossinis_sister1.png");
+    pWoman->setPosition(Vec2(120, 220));
+
+    auto pMan = Sprite::createWithSpriteFrameName("grossini_dance_01.png");
+    pMan->setPosition(Vec2(240, 220));
+
+    auto pBox = Sprite::createWithSpriteFrameName("blocks9.png");
+    pBox->setPosition(Vec2(360, 220));
+
+    this->addChild(pWoman);
+    this->addChild(pMan);
+    this->addChild(pBox);
+
 
     return true;
 }
