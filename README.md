@@ -393,7 +393,7 @@ CallFunc 인스턴스를 이용하면 복합 액션에 사용자가 원하는 �
 Sequence를 사용한 액션인 moveAndScaleUp과 rotAfter2s 메뉴아이템을 눌렀을 때는 reset 메뉴아이템을 누르지 않아도 원래 위치로 돌아가지만, rotTwice 메뉴아이템은 Sequence가 아닌 Repeat을 사용한 액션이기 때문에 자동으로 원래 위치로 돌아가지 않는다.
 
 -------
-# 애니메이션
+# 7. 애니메이션
 ## Animation과 Animate
 - Animation : 어떤 애니메이션이 재생되는지 명세하는 클래스. 프레임단위로 지정할 수 있으며, 프레임 사이 시간도 조정할 수 있다.
 - Animate : 지정된 애니메이션의 재생 정보를 담는 클래스.
@@ -409,7 +409,7 @@ plist파일을 이용할 때는 스프라이트 프레임 캐시에 plist 파일
 ![Animation](https://user-images.githubusercontent.com/54069713/232326541-ad31470e-d219-45f5-9a0f-8130457c9006.gif)
 
 -------
-# 스프라이트 캐시
+# 8. 스프라이트 캐시
 -------
 # 스케줄
 -------
