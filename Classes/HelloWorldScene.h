@@ -45,11 +45,8 @@ public:
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
-
-private:
-    void atlasCallBack(Ref* sender);
-    void plistCallBack(Ref* semder);
-    cocos2d::Sprite* pMan;
+    
+    void afterImgLoad(Ref* sender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

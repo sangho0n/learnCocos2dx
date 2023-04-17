@@ -55,22 +55,45 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
     this->addChild(wlayer);
 
-    // 스프라이트 생성 및 추가
-    pMan = Sprite::create("Images/grossini.png");
-    pMan->setPosition(Vec2(240, 160));
-    this->addChild(pMan); 
+    // Sprite Frame Cache 
 
+    auto sfcache = SpriteFrameCache::getInstance();
 
+    sfcache->addSpriteFramesWithFile("animations/grossini_family.plist");
+    sfcache->addSpriteFramesWithFile("animations/grossini.plist");
+    auto pSprite = SpriteFrame::create("images/blocks9.png", Rect(0, 0, 96, 96));
+    sfcache->addSpriteFrame(pSprite, "blocks9.png");
 
-    // atlas 애니메이션, plist 애니메이션
-    auto atlasItem = MenuItemFont::create(" Atlas ", CC_CALLBACK_1(HelloWorld::atlasCallBack, this));
+    auto pWoman = Sprite::createWithSpriteFrameName("grossinis_sister1.png");
+    pWoman->setPosition(Vec2(120, 220));
 
-    auto plistItem = MenuItemFont::create(" Plist ", CC_CALLBACK_1(HelloWorld::plistCallBack, this));
+    auto pMan = Sprite::createWithSpriteFrameName("grossini_dance_01.png");
+    pMan->setPosition(Vec2(240, 220));
 
-    auto runMenu = Menu::create(atlasItem, plistItem, nullptr);
-    runMenu->setPosition(Vec2(240, 80));
-    runMenu->alignItemsHorizontally();
-    this->addChild(runMenu);
+    auto pBox = Sprite::createWithSpriteFrameName("blocks9.png");
+    pBox->setPosition(Vec2(360, 220));
+
+    this->addChild(pWoman);
+    this->addChild(pMan);
+    this->addChild(pBox);
+
+    // Texture Cache
+
+    auto txCache = Director::getInstance()->getTextureCache();
+
+    auto texture1 = txCache->addImage("animations/grossini_dance_atlas.png");
+    auto texture2 = txCache->addImage("animations/dragon_animation.png");
+
+    auto pMan2 = Sprite::createWithTexture(texture1, Rect(0, 0, 85, 121));
+    pMan2->setPosition(Vec2(120, 100));
+
+    auto pDragon = Sprite::createWithTexture(texture2, Rect(0, 0, 130, 140));
+    pDragon->setPosition(Vec2(240, 100));
+
+    txCache->addImageAsync("images/blocks9.png", CC_CALLBACK_1(HelloWorld::afterImgLoad, this));
+
+    this->addChild(pMan2);
+    this->addChild(pDragon);
 
     return true;
 }
@@ -88,44 +111,10 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 }
 
-void HelloWorld::atlasCallBack(Ref* sender) {
-    auto animation = Animation::create(); animation->setDelayPerUnit(0.3f);
-    // 디렉터를 이용해 텍스처를 만드는 방법. 이 방법을 쓰면, 스프라이트 생성 시 위에서 파일을 다시 한번 불러오지 않고도, 캐시에 저장되어있는 것을 활용할 수 있음
-    auto texture = Director::getInstance()->getTextureCache()->addImage("Images/grossini_dance_atlas.png");
-    // 스프라이트를 통해 택스쳐를 만드는 방법
-    //auto sprite = Sprite::create("Images/grossini_dance_atlas.png");
-    //auto texture1 = sprite->getTexture();
-
-    for (int i = 0; i < 14; i++) {
-        int col = i % 5;
-        int row = i / 5;
-
-        animation->addSpriteFrameWithTexture(texture, Rect(col * 85, row * 121, 85, 121));
-    }
-
-    auto anim = Animate::create(animation);
-    pMan->runAction(anim);
-}
-
-void HelloWorld::plistCallBack(Ref* sender) {
-    auto cache = SpriteFrameCache::getInstance(); // singletone
-    cache->addSpriteFramesWithFile("animations/grossini.plist");
-
-    Vector<SpriteFrame*> animFrames;
-
-    std::string str;
-    for (int i = 1; i < 15; i++) {
-        if (i < 10)
-            str = ("grossini_dance_0" + std::to_string(i));
-        else
-            str = "grossini_dance_" + std::to_string(i);
-        str += ".png";
-
-        SpriteFrame* frame = cache->getSpriteFrameByName(str);
-        animFrames.pushBack(frame);
-    }
-
-    auto animation = Animation::createWithSpriteFrames(animFrames); animation->setDelayPerUnit(0.3f);
-    auto animate = Animate::create(animation);
-    pMan->runAction(animate);
+void HelloWorld::afterImgLoad(Ref* pSender)
+{
+    auto tex = static_cast<Texture2D*>(pSender);
+    auto sprite = Sprite::createWithTexture(tex);
+    sprite->setPosition(Vec2(360, 100));
+    this->addChild(sprite);
 }
