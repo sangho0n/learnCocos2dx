@@ -46,6 +46,7 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
     
+    void afterImgLoad(Ref* sender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

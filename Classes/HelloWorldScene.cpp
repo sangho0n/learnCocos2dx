@@ -77,6 +77,23 @@ bool HelloWorld::init()
     this->addChild(pMan);
     this->addChild(pBox);
 
+    // Texture Cache
+
+    auto txCache = Director::getInstance()->getTextureCache();
+
+    auto texture1 = txCache->addImage("animations/grossini_dance_atlas.png");
+    auto texture2 = txCache->addImage("animations/dragon_animation.png");
+
+    auto pMan2 = Sprite::createWithTexture(texture1, Rect(0, 0, 85, 121));
+    pMan2->setPosition(Vec2(120, 100));
+
+    auto pDragon = Sprite::createWithTexture(texture2, Rect(0, 0, 130, 140));
+    pDragon->setPosition(Vec2(240, 100));
+
+    txCache->addImageAsync("images/blocks9.png", CC_CALLBACK_1(HelloWorld::afterImgLoad, this));
+
+    this->addChild(pMan2);
+    this->addChild(pDragon);
 
     return true;
 }
@@ -94,3 +111,10 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 }
 
+void HelloWorld::afterImgLoad(Ref* pSender)
+{
+    auto tex = static_cast<Texture2D*>(pSender);
+    auto sprite = Sprite::createWithTexture(tex);
+    sprite->setPosition(Vec2(360, 100));
+    this->addChild(sprite);
+}
