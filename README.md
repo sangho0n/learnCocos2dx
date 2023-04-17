@@ -410,8 +410,19 @@ plist파일을 이용할 때는 스프라이트 프레임 캐시에 plist 파일
 
 -------
 # 8. 스프라이트 캐시
+- SpriteFrameCache : 
+SpriteFrameCache::getInstance()를 통해 얻어올 수 있는 캐시(싱글톤). 스프라이트프레임을 등록해두고 필요할 때마다 꺼내 사용할 수 있다.
+- TextureCache : 
+Director::getInstace()->getTextureCache()를 통해 얻어올 수 있는 캐시(싱글톤). 위와 마찬가지로 텍스쳐를 등록해두고 필요할 때마다 꺼내 사용할 수 있다.
+
+두 캐시 모두 IO연산을 줄일 수 있다는 장점이 있다. 그러나 무분별한 사용은 메모리 사용량을 높힌다.
+
+스프라이트프레임 캐시는 이름에서도 알 수 있듯 애니메이션을 만드는 데 주로 사용되며, 텍스쳐캐시는 스프라이트를 생성할 때 주로 사용된다. 
+
+택스쳐캐시는 addImageAsync를 통한 비동기 텍스쳐 추가 기능도 제공한다. [콜백으로 넘어간 함수는 메인스레드에서 돌아가기 때문에](https://docs.cocos2d-x.org/api-ref/cplusplus/v4x/de/d33/classcocos2d_1_1_texture_cache.html#a24a87c57186c91bf5acc93e0575eaaac) 어떤 cocos2d 오브젝트든지 콜백함수 내에서 생성, 사용, 삭제해도 무방하다.
+
 -------
-# 스케줄
+# 9. 스케줄
 -------
 # 프로그레스 타이머
 -------
