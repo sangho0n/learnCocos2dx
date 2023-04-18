@@ -52,48 +52,13 @@ bool HelloWorld::init()
     }
 
     // 씬 레이어 크기 지정
-    auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
+    auto wlayer = LayerColor::create(Color4B(255,255,255,255));
     this->addChild(wlayer);
 
-    // Sprite Frame Cache 
-
-    auto sfcache = SpriteFrameCache::getInstance();
-
-    sfcache->addSpriteFramesWithFile("animations/grossini_family.plist");
-    sfcache->addSpriteFramesWithFile("animations/grossini.plist");
-    auto pSprite = SpriteFrame::create("images/blocks9.png", Rect(0, 0, 96, 96));
-    sfcache->addSpriteFrame(pSprite, "blocks9.png");
-
-    auto pWoman = Sprite::createWithSpriteFrameName("grossinis_sister1.png");
-    pWoman->setPosition(Vec2(120, 220));
-
-    auto pMan = Sprite::createWithSpriteFrameName("grossini_dance_01.png");
-    pMan->setPosition(Vec2(240, 220));
-
-    auto pBox = Sprite::createWithSpriteFrameName("blocks9.png");
-    pBox->setPosition(Vec2(360, 220));
-
-    this->addChild(pWoman);
-    this->addChild(pMan);
-    this->addChild(pBox);
-
-    // Texture Cache
-
-    auto txCache = Director::getInstance()->getTextureCache();
-
-    auto texture1 = txCache->addImage("animations/grossini_dance_atlas.png");
-    auto texture2 = txCache->addImage("animations/dragon_animation.png");
-
-    auto pMan2 = Sprite::createWithTexture(texture1, Rect(0, 0, 85, 121));
-    pMan2->setPosition(Vec2(120, 100));
-
-    auto pDragon = Sprite::createWithTexture(texture2, Rect(0, 0, 130, 140));
-    pDragon->setPosition(Vec2(240, 100));
-
-    txCache->addImageAsync("images/blocks9.png", CC_CALLBACK_1(HelloWorld::afterImgLoad, this));
-
-    this->addChild(pMan2);
-    this->addChild(pDragon);
+    nNum = 0;
+    this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::calledEveryFrame));
+    this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::myTick), 1.0f);
+    this->scheduleOnce(CC_SCHEDULE_SELECTOR(HelloWorld::myTickOnce), 3.0f);
 
     return true;
 }
@@ -111,10 +76,19 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 }
 
-void HelloWorld::afterImgLoad(Ref* pSender)
+void HelloWorld::calledEveryFrame(float f) 
 {
-    auto tex = static_cast<Texture2D*>(pSender);
-    auto sprite = Sprite::createWithTexture(tex);
-    sprite->setPosition(Vec2(360, 100));
-    this->addChild(sprite);
+    nNum++;
+    if (nNum > 60) nNum = 1;
+    log("fps : %d", nNum);
+}
+
+void HelloWorld::myTick(float f)
+{
+    log("tick per 1 sec");
+}
+
+void HelloWorld::myTickOnce(float f)
+{
+    log("tick once");
 }

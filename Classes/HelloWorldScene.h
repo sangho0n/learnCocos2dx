@@ -46,7 +46,10 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
     
-    void afterImgLoad(Ref* sender);
+    int nNum;
+    void calledEveryFrame(float f);
+    void myTick(float f);
+    void myTickOnce(float f);
 };
 
 #endif // __HELLOWORLD_SCENE_H__
