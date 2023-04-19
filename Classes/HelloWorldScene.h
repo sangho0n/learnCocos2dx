@@ -46,10 +46,15 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
     
-    int nNum;
-    void calledEveryFrame(float f);
-    void myTick(float f);
-    void myTickOnce(float f);
+    bool isFast;
+
+    void startSchedle(Ref* sender);
+    void pauseSchedule(Ref* sender);
+    void resumeSchedule(Ref* sender);
+    void toggleSpeed(Ref* sender);
+    void stopSchedule(Ref* sender);
+    void tick1(float f);
+    void tick2(float f);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

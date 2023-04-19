@@ -51,14 +51,30 @@ bool HelloWorld::init()
         return false;
     }
 
-    // 씬 레이어 크기 지정
     auto wlayer = LayerColor::create(Color4B(255,255,255,255));
     this->addChild(wlayer);
 
-    nNum = 0;
-    this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::calledEveryFrame));
-    this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::myTick), 1.0f);
-    this->scheduleOnce(CC_SCHEDULE_SELECTOR(HelloWorld::myTickOnce), 3.0f);
+    Vector<MenuItem*> items;
+    auto item1 = MenuItemFont::create("start", CC_CALLBACK_1(HelloWorld::startSchedle, this)); items.pushBack(item1);
+    auto item2 = MenuItemFont::create("pause", CC_CALLBACK_1(HelloWorld::pauseSchedule, this)); items.pushBack(item2);
+    auto item3 = MenuItemFont::create("resume", CC_CALLBACK_1(HelloWorld::resumeSchedule, this)); items.pushBack(item3);
+    auto item4 = MenuItemFont::create("toggleSpeed", CC_CALLBACK_1(HelloWorld::toggleSpeed, this)); items.pushBack(item4);
+    auto item5 = MenuItemFont::create("stop", CC_CALLBACK_1(HelloWorld::stopSchedule, this)); items.pushBack(item5);
+
+    for (auto item : items) item->setColor(Color3B::BLACK);
+
+    auto menu = Menu::createWithArray(items);
+    menu->alignItemsVertically();
+    this->addChild(menu);
+
+    auto tick1 = Label::createWithSystemFont("tick!", "Arial", 20);
+    auto tick2 = Label::createWithSystemFont("tick!", "Arial", 20);
+    tick1->setPosition(100, 200); tick1->setColor(Color3B::RED); tick1->setVisible(false); tick1->setName("tick1");
+    tick2->setPosition(370, 200); tick2->setColor(Color3B::RED); tick2->setVisible(false); tick2->setName("tick2");
+    this->addChild(tick1);
+    this->addChild(tick2);
+
+    isFast = false;
 
     return true;
 }
@@ -76,19 +92,50 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 }
 
-void HelloWorld::calledEveryFrame(float f) 
+void HelloWorld::startSchedle(Ref* sender)
 {
-    nNum++;
-    if (nNum > 60) nNum = 1;
-    log("fps : %d", nNum);
+    this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick1), 1.0f);
+    this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2), 2.0f);
 }
 
-void HelloWorld::myTick(float f)
+void HelloWorld::pauseSchedule(Ref* sender)
 {
-    log("tick per 1 sec");
+    Director::getInstance()->getScheduler()->pauseTarget(this);
 }
 
-void HelloWorld::myTickOnce(float f)
+void HelloWorld::resumeSchedule(Ref* sender)
 {
-    log("tick once");
+    Director::getInstance()->getScheduler()->resumeTarget(this);
+}
+
+void HelloWorld::toggleSpeed(Ref* sender)
+{
+    if (isFast)
+    {
+        isFast = false;
+        this->unschedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2));
+        this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2), 2.0f);
+        return;
+    }
+    isFast = true;
+    this->unschedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2));
+    this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2), 0.5f);
+}
+
+void HelloWorld::stopSchedule(Ref* sender)
+{
+    this->unschedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick1));
+    this->unschedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2));
+}
+
+void HelloWorld::tick1(float f)
+{
+    auto action = Blink::create(0.09, 1);
+    this->getChildByName("tick1")->runAction(action);
+}
+
+void HelloWorld::tick2(float f)
+{
+    auto action = Blink::create(0.09, 1);
+    this->getChildByName("tick2")->runAction(action);
 }
