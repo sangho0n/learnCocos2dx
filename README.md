@@ -423,8 +423,32 @@ Director::getInstace()->getTextureCache()를 통해 얻어올 수 있는 캐시(
 
 -------
 # 9. 스케줄
+## 스케줄과 스케줄러
+cocos2d-x 엔진은 시간 관리를 위해 스케줄과 스케줄러를 제공한다. 스케줄러는 싱글톤 오브젝트로, 다양한 메서드를 통해 프로그래머가 시간을 제어할 수 있도록 한다.
+스케줄은 Node를 상속받는 모든 클래스에서 호출할 수 있는 함수로, 이를 사용하여 특정 시간마다(혹은 매 프레임마다) 원하는 SEL_SCHEDULE 메서드를 호출할 수 있다.
+
+```cpp
+        this->unschedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2));
+        this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2), 2.0f);
+        // 4.0 버전부터는 schedule_selector() 매크로가 없어지고 CC_SCHEDULE_SELECTOR() 매크로를 사용해야 함.
+        // 해당 매크로는 인자로 넘어온 함수를 SEL_SCHEDULE로 static_cast함.
+```
+update(float deltaSec) 메서드는 매 프레임마다 자동으로 불리는 스케줄 task로, 프로그래머가 지정해주지 않아도 기본적으로 불리는 task이다. 한편, 스케줄을 등록 시 초를 지정해주어도 정확하게 그 주어진 시간마다 호출되지는 않기 때문에, 정확한 시간을 필요로 하는 경우 deltaSecond를 사용하는 것이 바람직하다.
+
+스케줄에 task 등록 및 사용한 모습(브랜치 9.3)
+
+![1](https://user-images.githubusercontent.com/54069713/233117752-eadff107-2b87-4606-b5f9-9e91ee7a7e0f.gif)
+
+왼쪽 tick은 1초마다, 오른쪽은 2초마다 깜빡거린다. toggleSpeed의 경우 오른쪽 tick을 0.5초마다 깜빡거리게 하거나 원래대로 되돌려 놓는다.~gif 변환 과정에서 제외된 프레임들이 좀 있는 듯..~
+
+다만, 9.3 예시처럼 pauseTarget, resumeTarget 메서드를 이용한 경우 지정된 오브젝트들만 정지되기 때문에, 전체 게임을 정지/재개시켜야 하는 경우 브랜치 9.4의 방법을 사용하는 것이 좋다.
+
+전체 게임 pause/resume 예시(브랜치 9.4)
+
+![2](https://user-images.githubusercontent.com/54069713/233117775-ded48c20-6dd0-47d2-9e19-cda34dc7853a.gif)
+
 -------
-# 프로그레스 타이머
+# 10. 프로그레스 타이머
 -------
 # 터치
 -------
