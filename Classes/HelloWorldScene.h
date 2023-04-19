@@ -46,7 +46,9 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
     
-    void afterImgLoad(Ref* sender);
+
+    void resumeSchedule(Ref* sender);
+    void pauseSchedule(Ref* sender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__

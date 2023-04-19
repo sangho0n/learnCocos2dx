@@ -51,49 +51,30 @@ bool HelloWorld::init()
         return false;
     }
 
-    // 씬 레이어 크기 지정
-    auto wlayer = LayerColor::create(Color4B(125, 125, 125, 255));
+    auto wlayer = LayerColor::create(Color4B(255,255,255,255));
     this->addChild(wlayer);
 
-    // Sprite Frame Cache 
+    Vector<MenuItem*> items;
+    auto item1 = MenuItemFont::create("resume", CC_CALLBACK_1(HelloWorld::resumeSchedule, this)); items.pushBack(item1);
+    auto item2 = MenuItemFont::create("pause", CC_CALLBACK_1(HelloWorld::pauseSchedule, this)); items.pushBack(item2);
 
-    auto sfcache = SpriteFrameCache::getInstance();
+    for(auto item : items) item->setColor(Color3B::BLACK);
 
-    sfcache->addSpriteFramesWithFile("animations/grossini_family.plist");
-    sfcache->addSpriteFramesWithFile("animations/grossini.plist");
-    auto pSprite = SpriteFrame::create("images/blocks9.png", Rect(0, 0, 96, 96));
-    sfcache->addSpriteFrame(pSprite, "blocks9.png");
+    auto menu = Menu::createWithArray(items);
+    menu->alignItemsHorizontally(); menu->setPosition(Vec2(240, 80));
 
-    auto pWoman = Sprite::createWithSpriteFrameName("grossinis_sister1.png");
-    pWoman->setPosition(Vec2(120, 220));
+    auto man = Sprite::create("Images/grossini.png");
+    man->setPosition(Vec2(100, 200));
+    this->addChild(man);
 
-    auto pMan = Sprite::createWithSpriteFrameName("grossini_dance_01.png");
-    pMan->setPosition(Vec2(240, 220));
+    auto move = MoveBy::create(1.5f, Vec2(280, 0));
+    auto back = move->reverse();
+    auto action = Sequence::create(move, back, nullptr);
 
-    auto pBox = Sprite::createWithSpriteFrameName("blocks9.png");
-    pBox->setPosition(Vec2(360, 220));
+    man->runAction(RepeatForever::create(action));
 
-    this->addChild(pWoman);
-    this->addChild(pMan);
-    this->addChild(pBox);
+    this->addChild(menu);
 
-    // Texture Cache
-
-    auto txCache = Director::getInstance()->getTextureCache();
-
-    auto texture1 = txCache->addImage("animations/grossini_dance_atlas.png");
-    auto texture2 = txCache->addImage("animations/dragon_animation.png");
-
-    auto pMan2 = Sprite::createWithTexture(texture1, Rect(0, 0, 85, 121));
-    pMan2->setPosition(Vec2(120, 100));
-
-    auto pDragon = Sprite::createWithTexture(texture2, Rect(0, 0, 130, 140));
-    pDragon->setPosition(Vec2(240, 100));
-
-    txCache->addImageAsync("images/blocks9.png", CC_CALLBACK_1(HelloWorld::afterImgLoad, this));
-
-    this->addChild(pMan2);
-    this->addChild(pDragon);
 
     return true;
 }
@@ -111,10 +92,12 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 }
 
-void HelloWorld::afterImgLoad(Ref* pSender)
+void HelloWorld::resumeSchedule(Ref* sender)
 {
-    auto tex = static_cast<Texture2D*>(pSender);
-    auto sprite = Sprite::createWithTexture(tex);
-    sprite->setPosition(Vec2(360, 100));
-    this->addChild(sprite);
+    Director::getInstance()->resume();
+}
+
+void HelloWorld::pauseSchedule(Ref* sender)
+{
+    Director::getInstance()->pause();
 }
