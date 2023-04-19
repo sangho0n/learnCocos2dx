@@ -55,26 +55,26 @@ bool HelloWorld::init()
     this->addChild(wlayer);
 
     Vector<MenuItem*> items;
-    auto item1 = MenuItemFont::create("start", CC_CALLBACK_1(HelloWorld::startSchedle, this)); items.pushBack(item1);
+    auto item1 = MenuItemFont::create("resume", CC_CALLBACK_1(HelloWorld::resumeSchedule, this)); items.pushBack(item1);
     auto item2 = MenuItemFont::create("pause", CC_CALLBACK_1(HelloWorld::pauseSchedule, this)); items.pushBack(item2);
-    auto item3 = MenuItemFont::create("resume", CC_CALLBACK_1(HelloWorld::resumeSchedule, this)); items.pushBack(item3);
-    auto item4 = MenuItemFont::create("toggleSpeed", CC_CALLBACK_1(HelloWorld::toggleSpeed, this)); items.pushBack(item4);
-    auto item5 = MenuItemFont::create("stop", CC_CALLBACK_1(HelloWorld::stopSchedule, this)); items.pushBack(item5);
 
-    for (auto item : items) item->setColor(Color3B::BLACK);
+    for(auto item : items) item->setColor(Color3B::BLACK);
 
     auto menu = Menu::createWithArray(items);
-    menu->alignItemsVertically();
+    menu->alignItemsHorizontally(); menu->setPosition(Vec2(240, 80));
+
+    auto man = Sprite::create("Images/grossini.png");
+    man->setPosition(Vec2(100, 200));
+    this->addChild(man);
+
+    auto move = MoveBy::create(1.5f, Vec2(280, 0));
+    auto back = move->reverse();
+    auto action = Sequence::create(move, back, nullptr);
+
+    man->runAction(RepeatForever::create(action));
+
     this->addChild(menu);
 
-    auto tick1 = Label::createWithSystemFont("tick!", "Arial", 20);
-    auto tick2 = Label::createWithSystemFont("tick!", "Arial", 20);
-    tick1->setPosition(100, 200); tick1->setColor(Color3B::RED); tick1->setVisible(false); tick1->setName("tick1");
-    tick2->setPosition(370, 200); tick2->setColor(Color3B::RED); tick2->setVisible(false); tick2->setName("tick2");
-    this->addChild(tick1);
-    this->addChild(tick2);
-
-    isFast = false;
 
     return true;
 }
@@ -92,50 +92,12 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 }
 
-void HelloWorld::startSchedle(Ref* sender)
+void HelloWorld::resumeSchedule(Ref* sender)
 {
-    this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick1), 1.0f);
-    this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2), 2.0f);
+    Director::getInstance()->resume();
 }
 
 void HelloWorld::pauseSchedule(Ref* sender)
 {
-    Director::getInstance()->getScheduler()->pauseTarget(this);
-}
-
-void HelloWorld::resumeSchedule(Ref* sender)
-{
-    Director::getInstance()->getScheduler()->resumeTarget(this);
-}
-
-void HelloWorld::toggleSpeed(Ref* sender)
-{
-    if (isFast)
-    {
-        isFast = false;
-        this->unschedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2));
-        this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2), 2.0f);
-        return;
-    }
-    isFast = true;
-    this->unschedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2));
-    this->schedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2), 0.5f);
-}
-
-void HelloWorld::stopSchedule(Ref* sender)
-{
-    this->unschedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick1));
-    this->unschedule(CC_SCHEDULE_SELECTOR(HelloWorld::tick2));
-}
-
-void HelloWorld::tick1(float f)
-{
-    auto action = Blink::create(0.09, 1);
-    this->getChildByName("tick1")->runAction(action);
-}
-
-void HelloWorld::tick2(float f)
-{
-    auto action = Blink::create(0.09, 1);
-    this->getChildByName("tick2")->runAction(action);
+    Director::getInstance()->pause();
 }
