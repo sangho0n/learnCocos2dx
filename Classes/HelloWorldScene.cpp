@@ -55,26 +55,19 @@ bool HelloWorld::init()
     this->addChild(wlayer);
 
     Vector<MenuItem*> items;
-    auto item1 = MenuItemFont::create("resume", CC_CALLBACK_1(HelloWorld::resumeSchedule, this)); items.pushBack(item1);
-    auto item2 = MenuItemFont::create("pause", CC_CALLBACK_1(HelloWorld::pauseSchedule, this)); items.pushBack(item2);
+    MenuItemFont::setFontSize(15); // static font size change method
+    auto item1 = MenuItemFont::create("radial", CC_CALLBACK_1(HelloWorld::radial, this)); items.pushBack(item1);
+    auto item2 = MenuItemFont::create("horizontal", CC_CALLBACK_1(HelloWorld::horizontal, this)); items.pushBack(item2); 
+    auto item3 = MenuItemFont::create("vertical", CC_CALLBACK_1(HelloWorld::vertical, this)); items.pushBack(item3); 
+    auto item4 = MenuItemFont::create("changeRate", CC_CALLBACK_1(HelloWorld::changeRate, this)); items.pushBack(item4);
+    auto item5 = MenuItemFont::create("withAction", CC_CALLBACK_1(HelloWorld::withAction, this)); items.pushBack(item5);
 
-    for(auto item : items) item->setColor(Color3B::BLACK);
+    for (auto item : items) { item->setColor(Color3B::BLACK); }
 
     auto menu = Menu::createWithArray(items);
     menu->alignItemsHorizontally(); menu->setPosition(Vec2(240, 80));
 
-    auto man = Sprite::create("Images/grossini.png");
-    man->setPosition(Vec2(100, 200));
-    this->addChild(man);
-
-    auto move = MoveBy::create(1.5f, Vec2(280, 0));
-    auto back = move->reverse();
-    auto action = Sequence::create(move, back, nullptr);
-
-    man->runAction(RepeatForever::create(action));
-
     this->addChild(menu);
-
 
     return true;
 }
@@ -92,12 +85,27 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 }
 
-void HelloWorld::resumeSchedule(Ref* sender)
+void HelloWorld::radial(Ref* sender)
 {
-    Director::getInstance()->resume();
+
 }
 
-void HelloWorld::pauseSchedule(Ref* sender)
+void HelloWorld::horizontal(Ref* sender)
 {
-    Director::getInstance()->pause();
+
+}
+
+void HelloWorld::vertical(Ref* sender)
+{
+
+}
+
+void HelloWorld::changeRate(Ref* sender)
+{
+
+}
+
+void HelloWorld::withAction(Ref* sender)
+{
+
 }

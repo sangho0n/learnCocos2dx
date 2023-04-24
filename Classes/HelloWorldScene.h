@@ -45,10 +45,15 @@ public:
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
-    
 
-    void resumeSchedule(Ref* sender);
-    void pauseSchedule(Ref* sender);
+    cocos2d::Sprite* p1;
+    cocos2d::Sprite* p2;
+
+    void radial(Ref* sender);
+    void horizontal(Ref* sender);
+    void vertical(Ref* sender);
+    void changeRate(Ref* sender);
+    void withAction(Ref* sender);
 };
 
 #endif // __HELLOWORLD_SCENE_H__
