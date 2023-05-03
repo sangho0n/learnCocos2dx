@@ -54,6 +54,9 @@ bool HelloWorld::init()
     auto wlayer = LayerColor::create(Color4B(255,255,255,255));
     this->addChild(wlayer);
 
+    p1 = Sprite::create("Images/grossinis_sister1.png");
+    p2 = Sprite::create("Images/grossinis_sister2.png");
+
     Vector<MenuItem*> items;
     MenuItemFont::setFontSize(15); // static font size change method
     auto item1 = MenuItemFont::create("radial", CC_CALLBACK_1(HelloWorld::radial, this)); items.pushBack(item1);
@@ -68,7 +71,8 @@ bool HelloWorld::init()
     menu->alignItemsHorizontally(); menu->setPosition(Vec2(240, 80));
 
     this->addChild(menu);
-
+    this->addChild(p1); p1->setVisible(false);
+    this->addChild(p2); p2->setVisible(false);
     return true;
 }
 
@@ -87,7 +91,27 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::radial(Ref* sender)
 {
+    auto to1 = ProgressTo::create(1.0f, 100.0f);
+    auto to2 = ProgressTo::create(1.0f, 100.0f);
+    auto reset = ProgressTo::create(0.0f, 0.0f);
+    auto seq1 = Sequence::createWithTwoActions(to1, reset->clone());
+    auto seq2 = Sequence::createWithTwoActions(to2, reset->clone());
 
+    // CC
+    t1 = ProgressTimer::create(p1);
+    t1->setType(ProgressTimer::Type::RADIAL);
+    t1->setPosition(Vec2(140, 160));
+    addChild(t1);
+
+    // CCW
+    t2 = ProgressTimer::create(p2);
+    t2->setType(ProgressTimer::Type::RADIAL);
+    t2->setPosition(Vec2(340, 160));
+    t2->setReverseDirection(true);
+    addChild(t2);
+
+    t1->runAction(seq1);
+    t2->runAction(seq2);
 }
 
 void HelloWorld::horizontal(Ref* sender)

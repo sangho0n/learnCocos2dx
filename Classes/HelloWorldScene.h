@@ -48,12 +48,16 @@ public:
 
     cocos2d::Sprite* p1;
     cocos2d::Sprite* p2;
+    cocos2d::ProgressTimer* t1;
+    cocos2d::ProgressTimer* t2;
 
     void radial(Ref* sender);
     void horizontal(Ref* sender);
     void vertical(Ref* sender);
     void changeRate(Ref* sender);
     void withAction(Ref* sender);
+
+    void reset();
 };
 
 #endif // __HELLOWORLD_SCENE_H__
